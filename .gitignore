@@ -32,3 +32,5 @@
 *.tdo
 *.fls
 *.pdf
+_debug/*
+_debug
