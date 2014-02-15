@@ -6,6 +6,8 @@
 
 #include "common.h"
 
+#define PI 3.14159265358979323846
+
 /*
 	Variables used in the program
 */
@@ -39,10 +41,18 @@ void setupVector(int n) {
 
 double sumVector(Vector vec, int start, int stop) {
   double sum = 0;
+  #pragma omp parallel for schedule(static) private(start) reduction(+:sum)
   for(;start < stop; start++) {
     printf("Number is: %f, start is: %i\n", vec->data[start*vec->stride], start);
-    sum = sum + vec->data[start*vec->stride];
+    sum = sum + vec->data[start];
   }
+  return sum;
+}
+
+double calcError(double sum)
+{
+  double S = pow(PI,2.0)/6.0;
+  return fabs(S - sum);
 }
 
 
@@ -56,8 +66,13 @@ int main(int argc, char** argv)
   int ii = atoi(argv[1]);
   printf("Number: %i\n", ii);
   setupVector(ii);
-  double crap = sumVector(vector, 0, ii);
-  printf("Sum: %f\n", crap);
+  double sum = sumVector(vector, 0, ii);
+  printf("Sum: %f\n", sum);
+  printf("Error S - S_n = %f\n", calcError(sum));
+
+  return 0;
+}
+
 
   ////////////////////
   // OpenMP testing //
@@ -67,6 +82,7 @@ int main(int argc, char** argv)
   /////////////////
   // MPI Testing //
   /////////////////
+  /*
   int rank, size, i, tag;
   MPI_Status status;
   char message[20];
@@ -82,7 +98,4 @@ int main(int argc, char** argv)
 
   printf("process %d: %s\n", rank, message);
 
-  close_app();
-
-  return 0;
-}
+  close_app();*/
