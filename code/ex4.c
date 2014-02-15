@@ -7,6 +7,12 @@
 #include "common.h"
 
 /*
+	Variables used in the program
+*/
+Vector vector;
+
+
+/*
    Function for testing the OpenMP lib
  */
 void openMpTest() {
@@ -15,6 +21,17 @@ void openMpTest() {
   {
     printf("OpenMP Test. Iteration %d\n", i);
   }
+}
+
+void fillVector_ex4(Vector x) {
+  int i;
+  for(i=0; i<x->len; ++i)
+    x->data[i*x->stride] = 1.0 / i*i;
+}
+
+void setupVector(int n) {
+	vector = createVector(n);
+	fillVector_ex4(vector);
 }
 
 
