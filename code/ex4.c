@@ -25,13 +25,24 @@ void openMpTest() {
 
 void fillVector_ex4(Vector x) {
   int i;
-  for(i=0; i<x->len; ++i)
-    x->data[i*x->stride] = 1.0 / i*i;
+  for(i=1; i<=x->len; ++i){
+    double random = (1.0 / (double)(i*i));
+    printf("Trying to input %f at %i\n", random, i-1);
+    x->data[i*x->stride-1] = random;
+  }
 }
 
 void setupVector(int n) {
 	vector = createVector(n);
 	fillVector_ex4(vector);
+}
+
+double sumVector(Vector vec, int start, int stop) {
+  double sum = 0;
+  for(;start < stop; start++) {
+    printf("Number is: %f, start is: %i\n", vec->data[start*vec->stride], start);
+    sum = sum + vec->data[start*vec->stride];
+  }
 }
 
 
@@ -42,14 +53,16 @@ int main(int argc, char** argv)
     return 1;
   }
 
-  int ii = (int)argv[1];
-
+  int ii = atoi(argv[1]);
+  printf("Number: %i\n", ii);
   setupVector(ii);
+  double crap = sumVector(vector, 0, ii);
+  printf("Sum: %f\n", crap);
 
   ////////////////////
   // OpenMP testing //
   ////////////////////
-  openMpTest();
+  //openMpTest();
 
   /////////////////
   // MPI Testing //
