@@ -51,9 +51,7 @@ int main(int argc, char** argv)
   MPI_Status status;
   char message[20];
 
-  MPI_Init(&argc, &argv);
-  MPI_Comm_size(MPI_COMM_WORLD, &size);
-  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  init_app(argc, argv, &rank, &size);
 
   tag = 100;
 
@@ -66,7 +64,7 @@ int main(int argc, char** argv)
 
   printf("process %d: %s\n", rank, message);
 
-  MPI_Finalize();
+  close_app();
 
   return 0;
 }
