@@ -20,6 +20,13 @@ void openMpTest() {
 
 int main(int argc, char** argv)
 {
+  if (argc < 2) {
+    printf("Need at least one parameter: i\n");
+    return 1;
+  }
+
+  int ii = (int)argv[1];
+
   openMpTest();
 
   // MPI Testing
