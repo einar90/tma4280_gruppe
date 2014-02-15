@@ -18,11 +18,6 @@ void openMpTest() {
 }
 
 
-void mpiTest(int rank) {
-
-}
-
-
 int main(int argc, char** argv)
 {
   openMpTest();
