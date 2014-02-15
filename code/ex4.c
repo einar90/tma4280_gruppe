@@ -2,18 +2,17 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "common.h"
 
 void populateVector(float* array, int n) {
-	for(i = 0; i < n-1; i++) {
+	for(int i = 0; i < n-1; i++) {
 		array[i] = 1.0 / (i*i);
 	}
 }
 
-float* createVector(float* array, int n) {
-	array = malloc(n * sizeof(float));
-}
+
 
 /*
    Function for testing the OpenMP lib
