@@ -44,15 +44,19 @@ int main(int argc, char** argv)
 
   int ii = (int)argv[1];
 
+
+  ////////////////////
+  // OpenMP testing //
+  ////////////////////
   openMpTest();
 
-  // MPI Testing
+  /////////////////
+  // MPI Testing //
+  /////////////////
   int rank, size, i, tag;
   MPI_Status status;
   char message[20];
-
   init_app(argc, argv, &rank, &size);
-
   tag = 100;
 
   if (rank == 0) {
