@@ -8,11 +8,7 @@
 
 #define PI 3.14159265358979323846
 
-/*
-	Variables used in the program
-*/
 Vector vector;
-
 
 /*
    Function for testing the OpenMP lib
@@ -29,7 +25,6 @@ void fillVector_ex4(Vector x) {
   int i;
   for(i=1; i<=x->len; ++i){
     double random = (1.0 / (double)(i*i));
-    printf("Trying to input %f at %i\n", random, i-1);
     x->data[i*x->stride-1] = random;
   }
 }
@@ -39,12 +34,12 @@ void setupVector(int n) {
 	fillVector_ex4(vector);
 }
 
-double sumVector(Vector vec, int start, int stop) {
+double sumVector(int start, int stop) {
   double sum = 0;
+  int i = start;
   #pragma omp parallel for schedule(static) private(start) reduction(+:sum)
-  for(;start < stop; start++) {
-    printf("Number is: %f, start is: %i\n", vec->data[start*vec->stride], start);
-    sum = sum + vec->data[start];
+  for(i; i < stop; i++) {
+    sum = sum + vector->data[i];
   }
   return sum;
 }
@@ -55,20 +50,32 @@ double calcError(double sum)
   return fabs(S - sum);
 }
 
+int intpow(int a, int b)
+{
+  int result = a;
+  for (int i = 1; i < b; ++i)
+  {
+    result = result*a;
+  }
+  return result;
+}
+
 
 int main(int argc, char** argv)
 {
-  if (argc < 2) {
-    printf("Need at least one parameter: i\n");
-    return 1;
+  int k;
+  for (k = 3; k < 15; k++){
+    int n = intpow(2,k);
+    setupVector(n);
+    double sum = sumVector(0, n);
+    printf("n = %d\n", n);
+    printf("Sum: %f\n", sum);
+    printf("Error S - S_n = %f\n\n", calcError(sum));
+    freeVector(vector);
   }
 
-  int ii = atoi(argv[1]);
-  printf("Number: %i\n", ii);
-  setupVector(ii);
-  double sum = sumVector(vector, 0, ii);
-  printf("Sum: %f\n", sum);
-  printf("Error S - S_n = %f\n", calcError(sum));
+
+
 
   return 0;
 }
