@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <stdio.h>
+#include <omp.h>
 #include "blaslapack.h"
 
 #ifdef HAVE_MPI
@@ -349,7 +350,7 @@ void lutsolve(Matrix A, Vector x, char uplo)
 double maxNorm(const Vector x)
 {
   // idamax is a fortran function, and the first index is 1
-  // since indices in C are 0 based, we have to decrease it 
+  // since indices in C are 0 based, we have to decrease it
   double result = fabs(x->data[idamax(&x->len, x->data, &x->stride)-1]);
 #ifdef HAVE_MPI
   if (x->comm_size > 1) {
