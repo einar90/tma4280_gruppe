@@ -44,6 +44,8 @@ int main(int argc, char** argv)
 
   int ii = (int)argv[1];
 
+  setupVector(ii);
+
   openMpTest();
 
   // MPI Testing
