@@ -8,37 +8,22 @@
 
 #define PI 3.14159265358979323846
 
-Vector vector;
-
-/*
-   Function for testing the OpenMP lib
- */
-void openMpTest() {
-  #pragma omp parallel for schedule(static)
-  for (int i = 0; i < 4; ++i)
-  {
-    printf("OpenMP Test. Iteration %d\n", i);
-  }
-}
 
 void fillVector_ex4(Vector x) {
   int i;
-  for(i=1; i<=x->len; ++i){
+  for(i=1; i<= x->len; ++i){
     double random = (1.0 / (double)(i*i));
     x->data[i*x->stride-1] = random;
   }
 }
 
-void setupVector(int n) {
-	vector = createVector(n);
-	fillVector_ex4(vector);
-}
 
-double sumVector(int start, int stop) {
+double sumVector(Vector vector, int start, int stop) {
   double sum = 0;
-  #pragma omp parallel for schedule(static) private(start) reduction(+:sum)
-  for(start; start < stop; start++) {
-    sum = sum + vector->data[start];
+  int i;
+#pragma omp parallel for schedule(static) private(i) reduction(+:sum)
+  for(i = start; i < stop; i++) {
+    sum = sum + vector->data[i];
   }
   return sum;
 }
@@ -62,28 +47,52 @@ int intpow(int a, int b)
 
 int main(int argc, char** argv)
 {
+  double starttime, endtime;
+  int rank, size, i, tag;
+  MPI_Status status;
+  init_app(argc, argv, &rank, &size);
+  tag = 100;
+  Vector vector;
+
   int k;
   for (k = 3; k < 15; k++){
     int n = intpow(2,k);
-    setupVector(n);
-    double sum = sumVector(0, n);
-    printf("n = %d\n", n);
-    printf("Sum: %f\n", sum);
-    printf("Error S - S_n = %f\n\n", calcError(sum));
+    int partlen = n/size;
+    double sum = 0;
+    if (rank == 0)
+    {
+      starttime = WallTime();
+      vector = createVector(n);
+      fillVector_ex4(vector);
+      for (int i = 1; i < size; ++i)
+      {
+        MPI_Send(&vector->data[(i-1)*partlen], partlen, MPI_DOUBLE, i, tag, MPI_COMM_WORLD);
+      }
+      for (int i = 1; i < size; ++i)
+      {
+        double recivedsum;
+        MPI_Recv(&recivedsum, 1, MPI_DOUBLE, i, 42, MPI_COMM_WORLD, &status);
+        sum += recivedsum;
+      }
+      endtime = WallTime();
+      printf("Time elapsed: %f\n", endtime-starttime);
+      printf("k = %d, n = %d\n", k, n);
+      printf("Sum: %f\n", sum);
+      printf("Error S - S_n = %f\n\n", calcError(sum));
+    }
+    else
+    {
+      vector = createVector(partlen);
+      MPI_Recv(vector->data, vector->len, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD, &status);
+      double partsum = sumVector(vector, 0, partlen);
+      MPI_Send(&partsum, 1, MPI_DOUBLE, 0, 42, MPI_COMM_WORLD);
+    }
+
     freeVector(vector);
   }
-
-
-
-
+  close_app();
   return 0;
 }
-
-
-  ////////////////////
-  // OpenMP testing //
-  ////////////////////
-  //openMpTest();
 
   /////////////////
   // MPI Testing //
@@ -103,5 +112,4 @@ int main(int argc, char** argv)
     MPI_Recv(message, 13, MPI_CHAR, 0, tag, MPI_COMM_WORLD, &status);
 
   printf("process %d: %s\n", rank, message);
-
-  close_app();*/
+  */
