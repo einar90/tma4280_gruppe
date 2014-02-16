@@ -36,10 +36,9 @@ void setupVector(int n) {
 
 double sumVector(int start, int stop) {
   double sum = 0;
-  int i = start;
   #pragma omp parallel for schedule(static) private(start) reduction(+:sum)
-  for(i; i < stop; i++) {
-    sum = sum + vector->data[i];
+  for(start; start < stop; start++) {
+    sum = sum + vector->data[start];
   }
   return sum;
 }
