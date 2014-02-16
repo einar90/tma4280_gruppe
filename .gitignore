@@ -34,3 +34,5 @@
 *.pdf
 _debug/*
 _debug
+_release/*
+_release/

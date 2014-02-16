@@ -21,7 +21,7 @@ void fillVector_ex4(Vector x) {
 double sumVector(Vector vector, int start, int stop) {
   double sum = 0;
   int i;
-#pragma omp parallel for schedule(static) private(i) reduction(+:sum)
+
   for(i = start; i < stop; i++) {
     sum = sum + vector->data[i];
   }
@@ -75,10 +75,10 @@ int main(int argc, char** argv)
         sum += recivedsum;
       }
       endtime = WallTime();
-      printf("Time elapsed: %f\n", endtime-starttime);
-      printf("k = %d, n = %d\n", k, n);
-      printf("Sum: %f\n", sum);
-      printf("Error S - S_n = %f\n\n", calcError(sum));
+      printf("%d\t", n);
+      printf("%f\t", endtime-starttime);
+      printf("%f\t", sum);
+      printf("%f\n", calcError(sum));
     }
     else
     {
