@@ -1,4 +1,5 @@
 clear all; close all; clc;
+format long;
 %%%%%%%%%%%%%%%
 % With OpenMP %
 %%%%%%%%%%%%%%%
@@ -77,9 +78,9 @@ np8 = dataset(25:36,:)
 % Plotting results %
 %%%%%%%%%%%%%%%%%%%%
 fig_err = figure('name', 'error vs n');
-loglog(p8(:,2),p8(:,4),'b');
+loglog(p8(:,2),p8(:,4),'b.');
 hold on;
-loglog(p2(:,2),p2(:,4),'r');
+loglog(p2(:,2),p2(:,4),'r--');
 legend(['P=8'; 'P=2']);
 xlabel('n'); ylabel('error');
 title('Error vs n, no omp');
@@ -96,13 +97,13 @@ plot(np8(:,2),np8(:,3),'b--');
 
 xlabel('n'); ylabel('t');
 title('Time vs. n');
-legend(['def omp, np=2';
-        'def omp, np=4';
-        'def omp, np=8';
-        'omp off, np=2';
-        'omp off, np=4';
-        'omp off, np=8'])
-legend('Location', 'EastOutside');
+legend(['omp threads = 8, mpi np=2';
+        'omp threads = 8, mpi np=4';
+        'omp threads = 8, mpi np=8';
+        'omp threads = 1, mpi np=2';
+        'omp threads = 1, mpi np=4';
+        'omp threads = 1, mpi np=8'])
+legend('Location', 'SouthOutside');
 
 
 fclose(fid);
