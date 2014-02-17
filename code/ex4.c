@@ -21,7 +21,7 @@ void fillVector_ex4(Vector x) {
 double sumVector(Vector vector, int start, int stop) {
   double sum = 0;
   int i;
-
+#pragma omp parallell for schedule(static) reduction(+:sum) private(i)
   for(i = start; i < stop; i++) {
     sum = sum + vector->data[i];
   }
