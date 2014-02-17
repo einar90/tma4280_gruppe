@@ -114,12 +114,18 @@ Division is not counted because dividing two floating point numbers is much more
 Under this assumption, we use $4 \times n$ FLOPs to initialize the vector $\mathbf{v}$.
 
 
-\begin{figure}[htbp]
+
+\section{Applicability of parallel computing for this problem} % (fold)
+\label{sec:applicability_of_parallel_computing_for_this_problem}
+This problem does not involve a large number of computations, and does not require a lot of memory. Therefore there are no good reasons to use parallel processing to solve this problem. We also see this quite clearly in Figure~\ref{fig:runtime}: the runtime increases with the number of MPI-processes, and is generally higher for 8 OpenMP threads than for 1 OpenMP thread.
+
+\begin{figure}[H]
   \centering
   \includegraphics[]{graphics/runtime.eps}
   \caption{A plot of the runtimes for various numbers of processors and data set sizes.}
   \label{fig:runtime}
 \end{figure}
+% section applicability_of_parallel_computing_for_this_problem (end)
 
 \begin{thebibliography}{1}
   \bibitem{wikiflops} Wikipedia article on \emph{FLOPS}: \url{http://en.wikipedia.org/wiki/Flops}.
