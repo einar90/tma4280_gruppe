@@ -57,7 +57,7 @@ int main(int argc, char** argv)
   int k;
   for (k = 3; k < 15; k++){
     int n = intpow(2,k);
-    int partlen = n/size;
+    int partlen = (int)ceil((double)n/((double)(size-1)));
     double sum = 0;
     if (rank == 0)
     {
@@ -66,7 +66,10 @@ int main(int argc, char** argv)
       fillVector_ex4(vector);
       for (int i = 1; i < size; ++i)
       {
-        MPI_Send(&vector->data[(i-1)*partlen], partlen, MPI_DOUBLE, i, tag, MPI_COMM_WORLD);
+        if (rank == size-1)
+          MPI_Send(&vector->data[(i-1)*partlen], vector->len-(partlen*(size-2)), MPI_DOUBLE, i, tag, MPI_COMM_WORLD);
+        else
+          MPI_Send(&vector->data[(i-1)*partlen], partlen, MPI_DOUBLE, i, tag, MPI_COMM_WORLD);
       }
       for (int i = 1; i < size; ++i)
       {
