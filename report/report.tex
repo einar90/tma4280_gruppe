@@ -4,6 +4,7 @@
 
 \author{Dzenan Dumpor \\ Einar Baumann \\ Teodor Heggelund}
 \title{TMA4280 Exercise 4}
+
 \begin{document}
 \maketitle
 
@@ -71,6 +72,14 @@ where $n$ is the number of elements to be summed. For all other processes, the m
 
 % section memory_requirement (end)
 
+\section{Counting FLOPs}
+A FLOP (Floating Point Operation) is according to Wikipedia adding or multiplying two floating point numbers. When generating our vector we first multiply two integers, then divide 1.0 by the result. This is zero floating point operations.
+Division is not counted because dividing two floating point numbers is much more expensive. Stack Overflow-user Die in Sente claims that
+\begin{quote}
+How much longer depends on the processor, but there's sort of a defacto standard in the HPC community to count one division as 4 flops
+\end{quote}
+Under this assumption, we use $4 \times n$ FLOPs to initialize $\mathbf{v}$.
+
 
 \begin{figure}[htbp]
   \centering
@@ -78,11 +87,5 @@ where $n$ is the number of elements to be summed. For all other processes, the m
   \caption{A plot of the runtimes for various numbers of processors and data set sizes.}
   \label{fig:runtime}
 \end{figure}
-
-
-\begin{thebibliography}{1}
-  \bibitem{wikiflop} Wikipedia article: \emph{FLOPS}. \url{http://en.wikipedia.org/wiki/Flops}
-\end{thebibliography}
-
 
 \end{document}
