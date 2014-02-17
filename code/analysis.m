@@ -77,9 +77,9 @@ np8 = dataset(25:36,:)
 % Plotting results %
 %%%%%%%%%%%%%%%%%%%%
 fig_err = figure('name', 'error vs n');
-loglog(np8(:,2),np8(:,4),'b');
+loglog(p8(:,2),p8(:,4),'b');
 hold on;
-loglog(np2(:,2),np2(:,4),'r');
+loglog(p2(:,2),p2(:,4),'r');
 legend(['P=8'; 'P=2']);
 xlabel('n'); ylabel('error');
 title('Error vs n, no omp');
