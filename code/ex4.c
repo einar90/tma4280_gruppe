@@ -79,9 +79,9 @@ int main(int argc, char** argv)
       }
       endtime = WallTime();
       printf("%d\t", n);
-      printf("%f\t", endtime-starttime);
-      printf("%f\t", sum);
-      printf("%f\n", calcError(sum));
+      printf("%lf\t", endtime-starttime);
+      printf("%lf\t", sum);
+      printf("%lf\n", calcError(sum));
     }
     else
     {
