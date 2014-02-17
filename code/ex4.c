@@ -12,8 +12,8 @@
 void fillVector_ex4(Vector x) {
   int i;
   for(i=1; i<= x->len; ++i){
-    double random = (1.0 / (double)(i*i));
-    x->data[i*x->stride-1] = random;
+    double temp = (1.0 / (double)(i*i));
+    x->data[i*x->stride-1] = temp;
   }
 }
 
