@@ -113,6 +113,7 @@ Division is not counted because dividing two floating point numbers is much more
 \end{quote}
 Under this assumption, we use $4 \times n$ FLOPs to initialize the vector $\mathbf{v}$.
 
+The summation is then distributed on the processors, and in total $n-1$ summations are calculated on all the processors, hence the summation requires $n-1 FLOPs$.
 
 \begin{figure}[htbp]
   \centering
