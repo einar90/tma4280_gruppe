@@ -122,12 +122,12 @@ FLOPs, however, is a bad way of measuring how expensive this program is to run, 
 \label{sec:applicability_of_parallel_computing_for_this_problem}
 This problem does not involve a large number of computations, and does not require a lot of memory. Therefore there are no good reasons to use parallel processing to solve this problem. We also see this quite clearly in Figure~\ref{fig:runtime}: the runtime increases with the number of MPI-processes, and is generally higher for 8 OpenMP threads than for 1 OpenMP thread.
 
-In reality, the sum is exact, so using a numeric method to approximate the sum is unneccesary.
+In reality, the sum is exact, so using a numeric method to approximate the sum is unnecessary.
 
 \begin{figure}[H]
   \centering
   \includegraphics[]{graphics/runtime.eps}
-  \caption{A plot of the runtimes for various numbers of processors and data set sizes. Perfomance has been measured using a quad core, 8 thread Ivy Bridge CPU, i7-3610QM @ 2.30GHz}
+  \caption{A plot of the run-times for various numbers of processors and data set sizes. Performance has been measured using a quad core, 8 thread Ivy Bridge CPU, i7-3610QM @ 2.30GHz}
   \label{fig:runtime}
 \end{figure}
 % section applicability_of_parallel_computing_for_this_problem (end)
