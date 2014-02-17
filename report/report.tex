@@ -114,17 +114,20 @@ Division is not counted because dividing two floating point numbers is much more
 \end{quote}
 Under this assumption, we use $4 \times n$ FLOPs to initialize the vector $\mathbf{v}$.
 
-The summation is then distributed on the processors, and in total $n-1$ summations are calculated on all the processors, hence the summation requires $n-1 FLOPs$.
+The summation is then distributed on the processors, and in total $n-1$ summations are calculated on all the processors, hence the summation requires $n-1 FLOPs$. When using multiple processors, these summations are distributed on different processors. The total number of summations is still $n-1$.
+FLOPs, however, is a bad way of measuring how expensive this program is to run, and should not be used as a tool of measuring this. If we had compared the number of FLOPs required by this program to the theoretical peak performance of the computer, we would have found that the processor's floating point operation performance is far from the bottleneck of this program.
 
 
 \section{Applicability of parallel computing for this problem} % (fold)
 \label{sec:applicability_of_parallel_computing_for_this_problem}
 This problem does not involve a large number of computations, and does not require a lot of memory. Therefore there are no good reasons to use parallel processing to solve this problem. We also see this quite clearly in Figure~\ref{fig:runtime}: the runtime increases with the number of MPI-processes, and is generally higher for 8 OpenMP threads than for 1 OpenMP thread.
 
+In reality, the sum is exact, so using a numeric method to approximate the sum is unneccesary.
+
 \begin{figure}[H]
   \centering
   \includegraphics[]{graphics/runtime.eps}
-  \caption{A plot of the runtimes for various numbers of processors and data set sizes.}
+  \caption{A plot of the runtimes for various numbers of processors and data set sizes. Perfomance has been measured using a quad core, 8 thread Ivy Bridge CPU, i7-3610QM @ 2.30GHz}
   \label{fig:runtime}
 \end{figure}
 % section applicability_of_parallel_computing_for_this_problem (end)
