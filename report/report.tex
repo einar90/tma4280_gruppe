@@ -15,6 +15,18 @@ The source for the program can be found on Github: \url{https://github.com/einar
 % section program (end)
 
 
+\section{Utilizing OpenMP} % (fold)
+\label{sec:utilizing_openmp}
+OpenMP is enabled for the loop in the summing function through the use of a pragma:
+\begin{lstlisting}
+#pragma omp parallell for schedule(static) reduction(+:sum) private(i)
+  for(i = start; i < stop; i++) {
+    sum = sum + vector->data[i];
+  }
+\end{lstlisting}
+% section utilizing_openmp (end)
+
+
 \clearpage
 \section{Convenient MPI calls} % (fold)
 \label{sec:convenient_mpi_calls}
