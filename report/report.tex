@@ -27,6 +27,27 @@ OpenMP is enabled for the loop in the summing function through the use of a prag
 % section utilizing_openmp (end)
 
 
+\section{Utilizing MPI} % (fold)
+\label{sec:utilizing_mpi}
+MPI is used in the main-loop. Process 0 generates the entire vector and sends parts of it out to the other processes, then waits to receive the results. The other processes sum their part and send the result back to process 0.
+
+\begin{lstlisting}
+if (rank == 0){ %...
+  for (int i = 1; i < size; ++i){ %...
+    MPI_Send(&vector->data[(i-1)*partlen], partlen, MPI_DOUBLE, i, tag, MPI_COMM_WORLD);
+  }
+  for (int i = 1; i < size; ++i){ %...
+    MPI_Recv(&recivedsum, 1, MPI_DOUBLE, i, 42, MPI_COMM_WORLD, &status); %...
+  }
+}
+else { %...
+  MPI_Recv(vector->data, vector->len, MPI_DOUBLE, 0, tag, MPI_COMM_WORLD, &status); %...
+  MPI_Send(&partsum, 1, MPI_DOUBLE, 0, 42, MPI_COMM_WORLD);
+} %...
+\end{lstlisting}
+% section utilizing_mpi (end)
+
+
 \clearpage
 \section{Convenient MPI calls} % (fold)
 \label{sec:convenient_mpi_calls}
