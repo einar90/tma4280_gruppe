@@ -4,8 +4,29 @@
 \label{sec:discretizing_the_poisson_problem}
 Considering the solution of the two-dimensional Poisson problem:
 \begin{align}
-  - \nabla u &= f \;\;\; \text{in } \Omega = (0,1) \times (0,1) \\
-  u &= 0 \;\;\; \text{on } \partial \Omega
+  - \nabla u &= f \;\;\; \text{in } \Omega = (0,1) \times (0,1) \label{eq:poisson2d} \\
+  u &= 0 \;\;\; \text{on } \partial \Omega \label{eq:poisson2d_edge}
 \end{align}
+Expanding equation \eqref{eq:poisson2d}:
+\begin{equation}
+  -u_{xx} - u_{yy} = f(x,y) \label{eq:poisson2d_expanded}
+\end{equation}
+Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stencil illustrated in Figure :
+\begin{equation}
+  \nonumber
+  - \frac{u_{i-1,j} - 2u_{i,j} + u_{i+1,j}}{h^2} - \frac{u_{i,j-1} - 2u_{i,j} + u_{i,j+1}}{h^2} = f_{i,j}
+\end{equation}
+\begin{equation}
+  \frac{-u_{i-1,j} -u_{i,j-1} + 4u_{i,j} - u_{i+1,j} - u_{i,j+1}}{h^2} = f_{i,j}
+\end{equation}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[]{illustrations/stencils.pdf}
+  \caption{Illustration of the standard 5-point stencil.}
+  \label{fig:stencil}
+\end{figure}
+
 
 % section discretizing_the_poisson_problem (end)
