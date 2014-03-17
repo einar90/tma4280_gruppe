@@ -11,30 +11,48 @@ Expanding equation \eqref{eq:poisson2d}:
 \begin{equation}
   -u_{xx} - u_{yy} = f(x,y) \label{eq:poisson2d_expanded}
 \end{equation}
-Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stencil illustrated in Figure~\ref{fig:stencil}:
+Discretizing equation \eqref{eq:poisson2d_expanded} using a mesh like the one illustrated in Figure~\ref{fig:mesh} standard 5-point stencil illustrated in Figure~\ref{fig:stencil}:
 \begin{equation}
   \nonumber
   - \frac{u_{i-1,j} - 2u_{i,j} + u_{i+1,j}}{h^2} - \frac{u_{i,j-1} - 2u_{i,j} + u_{i,j+1}}{h^2} = f_{i,j}
 \end{equation}
 \begin{equation}
-  \frac{-u_{i-1,j} -u_{i,j-1} + 4u_{i,j} - u_{i+1,j} - u_{i,j+1}}{h^2} = f_{i,j}
+  -u_{i-1,j} -u_{i,j-1} + 4u_{i,j} - u_{i+1,j} - u_{i,j+1} = h^2 \cdot f_{i,j}
 \end{equation}
-The mesh is illustrated in Figure~\ref{fig:mesh}.
+This equation, combined with a numbering scheme like the one illustrated in Figure~\ref{fig:numbering_scheme} gives us a penta-diagonal matrix equation $\mathbf{Au}=h^2\mathbf{f}$ :
+\begin{equation}
+  \begin{bmatrix}
+    4  & -1 & -1 & 0  & 0  & 0  & \cdots & 0 & 0 \\
+    -1 & 4  & -1 & -1 & 0  & 0  & \cdots & 0 & 0 \\
+    -1 & -1 & 4  & -1 & -1 & 0  & \cdots & 0 & 0 \\
+    0  & -1 & -1 & 4  & -1 & -1 & \cdots & 0 & 0 \\
+       & & \ddots & \ddots & \ddots &   &        &   &   \\
+    0   & 0   & \cdots   &  0  & 0  &  0  &  -1  & -1 & 4
+  \end{bmatrix}
+  \times
+  \begin{bmatrix}
+    u_0 \\ u_1 \\ u_2 \\ \vdots \\ u_{n-1} \\ u_n
+  \end{bmatrix}
+  =
+  h^2 \cdot
+  \begin{bmatrix}
+    f_0 \\ f_1 \\ f_2 \\ \vdots \\ f_{n-1} \\ f_n
+  \end{bmatrix}
+\end{equation}
 
-
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[]{illustrations/stencils.pdf}
-  \caption{Illustration of the standard 5-point stencil.}
-  \label{fig:stencil}
-\end{figure}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics{illustrations/mesh.pdf}
   \caption{An illustration of a general two-dimensional mesh.}
   \label{fig:mesh}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[]{illustrations/stencils.pdf}
+  \caption{Illustration of the standard 5-point stencil.}
+  \label{fig:stencil}
 \end{figure}
 
 \begin{figure}[htbp]
