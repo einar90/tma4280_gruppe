@@ -90,7 +90,7 @@ where $n$ is the number of elements to be summed. For all other processes, the m
 
 \begin{table}[H]
   \centering
-  \caption{The memory required for various numbers of processors and data set sizes. For $P>1$, the memory used by the root process is ignored (it is what's shown in the first row).}
+  \caption{The memory required for various numbers of processors and data set sizes. For $P>0$, the memory used by the root process is ignored (it is what's shown in the first row).}
   \label{tab:memoryreq}
   \begin{tabularx}{1.0\textwidth}{X|XXXXXX}
     \toprule
@@ -110,7 +110,7 @@ where $n$ is the number of elements to be summed. For all other processes, the m
 A FLOP (Floating Point Operation) is according to Wikipedia adding or multiplying two floating point numbers\cite{wikiflops}. When generating our vector we first multiply two integers, then divide 1.0 by the result. This is zero floating point operations.
 Division is not counted because dividing two floating point numbers is much more expensive. Stack Overflow-user Die in Sente claims that
 \begin{quote}
-{\em How much longer depends on the processor, but there's sort of a defacto standard in the HPC community to count one division as 4 flops}
+{\em How much longer depends on the processor, but there's sort of a defacto standard in the HPC community to count one division as 4 flops\cite{stackflops}}
 \end{quote}
 Under this assumption, we use $4 \times n$ FLOPs to initialize the vector $\mathbf{v}$.
 
@@ -134,6 +134,7 @@ In reality, the sum is exact, so using a numeric method to approximate the sum i
 
 \begin{thebibliography}{1}
   \bibitem{wikiflops} Wikipedia article on \emph{FLOPS}: \url{http://en.wikipedia.org/wiki/Flops}.
+  \bibitem{stackflops} Stack Overflow answer on FLOPS: \url{http://stackoverflow.com/a/329243}
 \end{thebibliography}
 
 \end{document}
