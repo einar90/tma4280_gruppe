@@ -11,7 +11,7 @@ Expanding equation \eqref{eq:poisson2d}:
 \begin{equation}
   -u_{xx} - u_{yy} = f(x,y) \label{eq:poisson2d_expanded}
 \end{equation}
-Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stencil illustrated in Figure :
+Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stencil illustrated in Figure~\ref{fig:stencil}:
 \begin{equation}
   \nonumber
   - \frac{u_{i-1,j} - 2u_{i,j} + u_{i+1,j}}{h^2} - \frac{u_{i,j-1} - 2u_{i,j} + u_{i,j+1}}{h^2} = f_{i,j}
@@ -19,6 +19,8 @@ Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stenc
 \begin{equation}
   \frac{-u_{i-1,j} -u_{i,j-1} + 4u_{i,j} - u_{i+1,j} - u_{i,j+1}}{h^2} = f_{i,j}
 \end{equation}
+The mesh is illustrated in Figure~\ref{fig:mesh}.
+
 
 
 \begin{figure}[htbp]
@@ -26,6 +28,20 @@ Discretizing equation \eqref{eq:poisson2d_expanded} using standard 5-point stenc
   \includegraphics[]{illustrations/stencils.pdf}
   \caption{Illustration of the standard 5-point stencil.}
   \label{fig:stencil}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{illustrations/mesh.pdf}
+  \caption{An illustration of a general two-dimensional mesh.}
+  \label{fig:mesh}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{illustrations/equation_numbering.pdf}
+  \caption{The numbering scheme used.}
+  \label{fig:numbering_scheme}
 \end{figure}
 
 
