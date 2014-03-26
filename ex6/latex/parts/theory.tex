@@ -22,12 +22,12 @@ Discretizing equation \eqref{eq:poisson2d_expanded} using a mesh like the one il
 This equation, combined with a numbering scheme like the one illustrated in Figure~\ref{fig:numbering_scheme} gives us a penta-diagonal matrix equation $\mathbf{Au}=h^2\mathbf{f}$ :
 \begin{equation}
   \begin{bmatrix}
-    4  & -1 & -1 & 0  & 0  & 0  & \cdots & 0 & 0 \\
-    -1 & 4  & -1 & -1 & 0  & 0  & \cdots & 0 & 0 \\
-    -1 & -1 & 4  & -1 & -1 & 0  & \cdots & 0 & 0 \\
-    0  & -1 & -1 & 4  & -1 & -1 & \cdots & 0 & 0 \\
-       & & \ddots & \ddots & \ddots &   &        &   &   \\
-    0   & 0   & \cdots   &  0  & 0  &  0  &  -1  & -1 & 4
+    4      & -1 & 0      & \cdots & -1     & 0      & \cdots & 0      & 0      & 0 \\
+    -1     & 4  & -1     & 0      & \cdots & -1     & 0      & \cdots & 0      & 0 \\
+    0      & -1 & 4      & -1     & 0      & \cdots & -1     & 0      & \cdots & 0 \\
+    \vdots & -1 & -1     & 4      & -1     & -1     & \cdots & 0      & 0      & 0 \\
+    -1     & 0  & \ddots & \ddots & \ddots & 0      &        &        & -1     &   \\
+    0      & 0  & \cdots &  0     & 0      &  0     &  -1    & -1     & 4      &
   \end{bmatrix}
   \times
   \begin{bmatrix}
@@ -39,6 +39,7 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
     f_0 \\ f_1 \\ f_2 \\ \vdots \\ f_{n-1} \\ f_n
   \end{bmatrix}
 \end{equation}
+{\Huge \textbf{Se poisson-fdm.pdf for korrekt matrise!!!}}
 
 
 \begin{figure}[htbp]
