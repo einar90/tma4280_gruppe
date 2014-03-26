@@ -59,70 +59,35 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
 int main(int argc, char** argv)
 {
   int i, j, N, flag, local;
-  Matrix A=NULL, Q=NULL;
   Matrix b, e;
   Vector grid, lambda=NULL;
   double time, sum, h;
 
-  N=atoi(argv[1]);
-
   flag=12;
+  local = 0;
 
+  N=atoi(argv[1]);
   if (N < 0) {
     printf("invalid problem size given\n");
     return 2;
   }
-
-  if (flag < 0 || flag > 14) {
-    printf("invalid flag given\n");
-    return 3;
-  }
-
-  if (flag == 10 && (N-1)%2 != 0) {
-    printf("need an even size for red-black iterations\n");
-    return 4;
-  }
-
-  if (flag == 12 && (N & (N-1)) != 0) {
+  if ((N & (N-1)) != 0) {
     printf("need N to be a power-of-two for fst-based diagonalization\n");
     return 5;
   }
 
-  local = (flag== 9 || flag == 10);
-
   grid = equidistantMesh(0.0, 1.0, N);
-  if (local) {
-    b = createMatrix(N+1,N+1);
-    e = createMatrix(N+1,N+1);
-  } else {
-    b = createMatrix(N-1,N-1);
-    e = createMatrix(N-1,N-1);
-  }
+
+  b = createMatrix(N-1,N-1);
+  e = createMatrix(N-1,N-1);
+
   evalMeshInternal2(b, grid, source, local);
   h = grid->data[1]-grid->data[0];
   scaleVector(b->as_vec, pow(h, 2));
   evalMeshInternal2(e, grid, exact, local);
   axpy(b->as_vec, e->as_vec, alpha);
 
-  if (flag < 8) {
-    A = createMatrix((N-1)*(N-1),(N-1)*(N-1));
-    diag(A, -1, -1);
-    diag(A, 0, 4.0+alpha);
-    diag(A, 1, -1);
-    diag(A, N-1, -1);
-    diag(A, -(N-1), -1);
-    for (i=N-2;i<(N-1)*(N-1)-1;i+=N-1) {
-      A->data[i+1][i] = 0.0;
-      A->data[i][i+1] = 0.0;
-    }
-  }
-
-  if (flag >= 11 && flag < 13)
-    lambda = generateEigenValuesP1D(N-1);
-  if (flag == 11)
-    Q = generateEigenMatrixP1D(N-1);
-
-
+  lambda = generateEigenValuesP1D(N-1);
 
   time = WallTime();
 
@@ -134,10 +99,6 @@ int main(int argc, char** argv)
 
   printf("max error: %e\n", maxNorm(b->as_vec));
 
-  if (A)
-    freeMatrix(A);
-  if (Q)
-    freeMatrix(Q);
   freeMatrix(b);
   freeMatrix(e);
   freeVector(grid);
