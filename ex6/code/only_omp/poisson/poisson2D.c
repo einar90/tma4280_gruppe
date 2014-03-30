@@ -117,14 +117,14 @@ int main(int argc, char** argv)
 
   printf("max error: %e\n", maxNorm(b->as_vec));
 
-  for (i = 0; i < b->rows; ++i)
-  {
-    for (j = 0; j < b->cols; ++j)
-    {
-      printf("%f ", b->data[i][j]);
-    }
-    printf("\n");
-  }
+  // for (i = 0; i < b->rows; ++i)
+  // {
+  //   for (j = 0; j < b->cols; ++j)
+  //   {
+  //     printf("%f ", b->data[i][j]);
+  //   }
+  //   printf("\n");
+  // }
 
   freeMatrix(b);
   freeMatrix(e);
