@@ -14,6 +14,7 @@ double source(double x, double y)
 }
 
 
+
 int main(int argc, char** argv)
 {
   int rank, size;
@@ -34,27 +35,51 @@ int main(int argc, char** argv)
 
   local = 0;
 
-  grid = equidistantMesh(0.0, 1.0, N);
-  b = createMatrix(N-1,N-1);
-  e = createMatrix(N-1,N-1);
 
-  evalMeshInternal2(b, grid, source, local);
+  int partlen = (int)ceil((double)(N)/((double)(size-1)));
 
 
-  printf("Before the matrix transpose\n");
-  for (i = 0; i < b->rows; ++i)
-  {
-    for (j = 0; j < b->cols; ++j)
+  // If you're master create everything
+  if(rank == 0){
+    grid = equidistantMesh(0.0, 1.0, N);
+    b = createMatrixMPICart(N-1,N-1, MPI_COMM_WORLD, 1);
+    e = createMatrixMPICart(N-1,N-1, MPI_COMM_WORLD, 1);
+    evalMeshInternal2(b, grid, source, 0);
+
+    Vector temp = b->as_vec;
+    Vector length = createVector(size);
+    Vector displ = createVector(size);
+
+    //splitVector(b->as_vec->glob_len, size, length->data, displ->data);
+
+    //MPI_Scatterv(&temp, b->rows,  )
+
+  }
+  else {
+    // Visst antall rader med lengde N-1
+    b = createMatrix(partlen, N-1);
+
+
+  }
+
+
+
+  if(rank == 0){
+    printf("Before the matrix transpose\n");
+    for (i = 0; i < b->rows; ++i)
     {
-      printf("%f ", b->data[i][j]);
+      for (j = 0; j < b->cols; ++j)
+      {
+        printf("%f ", b->data[i][j]);
+      }
+      printf("\n");
     }
-    printf("\n");
   }
 
   // Do Transpose
   if(rank == 0){
     printf("I am the master\n");
-  } 
+  }
   else {
     printf("I am a slave\n");
   }
@@ -68,15 +93,16 @@ int main(int argc, char** argv)
 
 
 
-
-  printf("After matrix transpose\n");
-  for (i = 0; i < b->rows; ++i)
-  {
-    for (j = 0; j < b->cols; ++j)
+  if(rank == 0){
+    printf("After matrix transpose\n");
+    for (i = 0; i < b->rows; ++i)
     {
-      printf("%f ", b->data[i][j]);
+      for (j = 0; j < b->cols; ++j)
+      {
+        printf("%f ", b->data[i][j]);
+      }
+      printf("\n");
     }
-    printf("\n");
   }
 
 
