@@ -63,11 +63,11 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
       }
 
       printf("Trying to send this data to %d\n", i);
-      for (j = 0; j < copyMatrix->rows; ++j)
+      for (r = 0; r < copyMatrix->rows; ++r)
       {
-        for (k = 0; k < copyMatrix->cols; ++k)
+        for (c = 0; c < copyMatrix->cols; ++c)
         {
-          printf("%f\t", copyMatrix->data[j][k]);
+          printf("%f\t", copyMatrix->data[c][r]);
         }
         printf("\n");
       }
@@ -78,15 +78,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
       printf("Root process sent data to process#%d\n", i);
       freeMatrix(copyMatrix);
       printf("Freed matrix.\n");
-
-      for (j = 0; j < b->rows; ++j)
-    {
-      for (k = 0; k < b->cols; ++k)
-      {
-        printf("%5.2f\t", b->data[k][j]);
-      }
-      printf("\n");
-    }
     }
   }
 
@@ -98,11 +89,11 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
     printf("b after recv for rank %d\n", rank);
     printf("First element in recv b: %f\n", b->data[0][0]);
-    for (j = 0; j < b->rows; ++j)
+    for (c = 0; c < b->cols; ++c)
     {
-      for (k = 0; k < b->cols; ++k)
+      for (r = 0; r < b->rows; ++r)
       {
-        printf("%7.4f\t", b->data[k][j]);
+        printf("%7.4f\t", b->data[c][r]);
       }
       printf("\n");
     }
