@@ -30,7 +30,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   double time;
 
   time = WallTime();
-#pragma omp parallel for schedule(static) private(i)
+#pragma omp parallel for schedule(static)
   for (i=0;i<b->cols;++i)
     fst(b->data[i], &N, buf->data[i], &NN);
   printf("Time spent on first fst: %f\n", WallTime() - time);
@@ -40,7 +40,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   printf("Time spent on first transpose: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static) private(i)
+#pragma omp parallel for schedule(static)
   for (i=0;i<ut->cols;++i)
     fstinv(ut->data[i], &N, buf->data[i], &NN);
   printf("Time spent on first fstinv: %f\n", WallTime() - time);
@@ -54,7 +54,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   printf("Time spent computing lambdas: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static) private(i)
+#pragma omp parallel for schedule(static)
   for (i=0;i<b->cols;++i)
     fst(ut->data[i], &N, buf->data[i], &NN);
   printf("Time spent on second fst: %f\n", WallTime() - time);
@@ -64,7 +64,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   printf("Time spent on second transpose: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static) private(i)
+#pragma omp parallel for schedule(static)
   for (i=0;i<ut->cols;++i)
     fstinv(b->data[i], &N, buf->data[i], &NN);
   printf("Time spent on second fstinv: %f\n", WallTime() - time);
