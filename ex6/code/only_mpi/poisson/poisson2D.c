@@ -143,13 +143,13 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   // printf("Freed ut and buf on rank %d.\n", rank);
 }
 
-void safePrintMatrix(Matrix m, int processc)
+void safePrintMatrix(Matrix m, int proc_id)
 {
   int rows = m->rows, cols = m->cols;
 
   char start[32], end[32];
-  sprintf(start, "##   Printing from %d    ##\n", processc);
-  sprintf(end,   "## Done printing from %d ##\n", processc);
+  sprintf(start, "##   Printing from %d    ##\n", proc_id);
+  sprintf(end,   "## Done printing from %d ##\n", proc_id);
 
   // 10 digits allocated per number. 1 digit per newline.
   int bufferLength = 10*rows*cols + 1*rows;
