@@ -36,7 +36,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   Matrix copyMatrix;
 
   if(rank == 0) {
-    safePrintMatrix(b, 0);
+    safePrintMatrix(b, rank);
     lambda = generateEigenValuesP1D(N-1);
     for (i = 0; i < size-1; ++i)
     {
@@ -147,6 +147,10 @@ void safePrintMatrix(Matrix m, int processc)
 {
   int rows = m->rows, cols = m->cols;
 
+  char start[32], end[32];
+  sprintf(start, "##   Printing from %d    ##\n", processc);
+  sprintf(end,   "## Done printing from %d ##\n", processc);
+
   // 10 digits allocated per number. 1 digit per newline.
   int bufferLength = 10*rows*cols + 1*rows;
   int r, c, i, pos;
@@ -161,7 +165,7 @@ void safePrintMatrix(Matrix m, int processc)
     }
     pos += sprintf(buf + pos, "\n");
   }
-  printf("%s", buf);
+  printf("%s%s%s", start, buf, end);
 
 }
 
