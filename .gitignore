@@ -36,3 +36,4 @@ _debug/*
 _debug
 _release/*
 _release/
+*_build/
