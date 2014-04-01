@@ -18,6 +18,28 @@ double source(double x, double y)
   return -30.0*pow(y,4)*x*(pow(x,5.0)-1)-30.0*pow(x,4)*y*(pow(y,5)-1);
 }
 
+void safePrintMatrix(Matrix m, int proc_id)
+{
+  int rows = m->rows, cols = m->cols;
+  char start[32], end[32];
+  sprintf(start, "##   Printing from %d    ##\n", proc_id);
+  sprintf(end,   "## Done printing from %d ##\n", proc_id);
+  // 10 digits allocated per number. 1 digit per newline.
+  int bufferLength = 10*rows*cols + 1*rows;
+  int r, c, i, pos;
+  char buf[bufferLength];
+  pos = 0;
+  for (r = 0; r < rows; ++r)
+  {
+    for (c = 0; c < cols; ++c)
+    {
+      pos += sprintf(buf + pos, "%8.4f ", m->data[c][r]);
+    }
+    pos += sprintf(buf + pos, "\n");
+  }
+  printf("%s%s%s", start, buf, end);
+}
+
 
 
 void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
@@ -34,6 +56,8 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   for (i=0;i<b->cols;++i)
     fst(b->data[i], &N, buf->data[i], &NN);
   printf("Time spent on first fst: %f\n", WallTime() - time);
+
+  safePrintMatrix(b, 9000);
 
   time = WallTime();
   transposeMatrix(ut, b);
@@ -117,14 +141,14 @@ int main(int argc, char** argv)
 
   printf("max error: %e\n", maxNorm(b->as_vec));
 
-  for (i = 0; i < b->rows; ++i)
-  {
-    for (j = 0; j < b->cols; ++j)
-    {
-      printf("%f ", b->data[i][j]);
-    }
-    printf("\n");
-  }
+  // for (i = 0; i < b->rows; ++i)
+  // {
+  //   for (j = 0; j < b->cols; ++j)
+  //   {
+  //     printf("%f ", b->data[i][j]);
+  //   }
+  //   printf("\n");
+  // }
 
   freeMatrix(b);
   freeMatrix(e);
