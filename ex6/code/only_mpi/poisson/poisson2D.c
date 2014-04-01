@@ -89,19 +89,18 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
     time = WallTime();
     for (i=0;i<b->cols;++i)
       fst(b->data[i], &N, buf->data, &NN);
-    printf("Time spent on first fst: %f\n", WallTime() - time);
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
 
-    printf("b after recv for rank %d\n", rank);
-    for (c = 0; c < b->cols; ++c)
-    {
-      for (r = 0; r < b->rows; ++r)
-      {
-        printf("%7.4f\t", b->data[c][r]);
-      }
-      printf("\n");
-    }
+    // printf("b after recv for rank %d\n", rank);
+    // for (c = 0; c < b->cols; ++c)
+    // {
+    //   for (r = 0; r < b->rows; ++r)
+    //   {
+    //     printf("%7.4f\t", b->data[c][r]);
+    //   }
+    //   printf("\n");
+    // }
   }
 
 
@@ -112,7 +111,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
     transposeMatrix(ut, b);
     printf("Time spent on first transpose: %f\n", WallTime() - time);
 
-    distributeCols(partlens, displacements, N, b, copyMatrix, size, 300);
+    distributeCols(partlens, displacements, N, ut, copyMatrix, size, 300);
   }
 
 
@@ -122,9 +121,9 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
              0, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
     time = WallTime();
-    for (i=0;i<ut->cols;++i)
-      fstinv(ut->data[i], &N, buf->data, &NN);
-    printf("Time spent on first fstinv: %f\n", WallTime() - time);
+    //ut to b for these ranks, not sure
+    for (i=0;i<b->cols;++i)
+      fstinv(b->data[i], &N, buf->data, &NN);
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 400, MPI_COMM_WORLD);
   }
@@ -132,7 +131,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
   if (rank == 0)
   {
-    recvParts(partlens, displacements, b, N, size, 400);
+    recvParts(partlens, displacements, ut, N, size, 400);
     time = WallTime();
     for (j=0;j<b->cols;++j){
       for (i=0;i<b->rows;++i){
@@ -140,30 +139,54 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
       }
     }
     printf("Time spent computing lambdas: %f\n", WallTime() - time);
+
+    distributeCols(partlens, displacements, N, ut, copyMatrix, size, 500);
   }
 
 
-  if(rank == 0) {
+  if (rank != 0)
+  {
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+             0, 500, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
     time = WallTime();
     for (i=0;i<b->cols;++i)
-      fst(ut->data[i], &N, buf->data, &NN);
-    printf("Time spent on second fst: %f\n", WallTime() - time);
+      fst(b->data[i], &N, buf->data, &NN);
+
+    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 600, MPI_COMM_WORLD);
+  }
+
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, ut, N, size, 600);
 
     time = WallTime();
     transposeMatrix(b, ut);
     printf("Time spent on second transpose: %f\n", WallTime() - time);  // freeMatrix(ut);
 
+    distributeCols(partlens, displacements, N, b, copyMatrix, size, 700);
+  }
+
+
+  if(rank != 0) {
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+             0, 700, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
     time = WallTime();
     for (i=0;i<ut->cols;++i)
       fstinv(b->data[i], &N, buf->data, &NN);
-    printf("Time spent on second fstinv: %f\n", WallTime() - time);
 
+    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 800, MPI_COMM_WORLD);
+  }
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, b, N, size, 800);
   }
 
   freeMatrix(ut);
   freeVector(buf);
-  printf("Freed ut and buf on rank %d.\n", rank);
 }
 
 
