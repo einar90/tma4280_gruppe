@@ -132,14 +132,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
   if (rank == 0)
   {
-
-  }
-
-
-  if(rank == 0) {
-
-
-
+    recvParts(partlens, displacements, b, N, size, 400);
     time = WallTime();
     for (j=0;j<b->cols;++j){
       for (i=0;i<b->rows;++i){
@@ -147,6 +140,10 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
       }
     }
     printf("Time spent computing lambdas: %f\n", WallTime() - time);
+  }
+
+
+  if(rank == 0) {
 
     time = WallTime();
     for (i=0;i<b->cols;++i)
