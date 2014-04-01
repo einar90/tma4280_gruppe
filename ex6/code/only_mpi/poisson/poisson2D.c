@@ -15,7 +15,8 @@ double exact(double x, double y)
 
 double source(double x, double y)
 {
-  return -30.0*pow(y,4)*x*(pow(x,5.0)-1)-30.0*pow(x,4)*y*(pow(y,5)-1);
+  // return -30.0*pow(y,4)*x*(pow(x,5.0)-1)-30.0*pow(x,4)*y*(pow(y,5)-1);
+  return 2*x+y;
 }
 
 
@@ -36,14 +37,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
   if(rank == 0) {
     lambda = generateEigenValuesP1D(N-1);
-
-    printf("Partlens:\n");
-    for (i = 0; i < size-1; ++i)
-    {
-      printf("%d ", partlens[i]);
-    }
-    printf("\n");
-    printf("Displacements:\n");
     for (i = 0; i < size-1; ++i)
     {
       printf("%d ", displacements[i]);
@@ -63,27 +56,28 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
       }
 
       printf("Trying to send this data to %d\n", i);
-      for (r = 0; r < copyMatrix->rows; ++r)
+      for (c = 0; c < copyMatrix->as_vec->len; ++c)
       {
-        for (c = 0; c < copyMatrix->cols; ++c)
-        {
-          printf("%f\t", copyMatrix->data[c][r]);
-        }
-        printf("\n");
+        printf("%7.3f\t", copyMatrix->as_vec->data[c]);
       }
+      printf("\n");
+      // for (r = 0; r < copyMatrix->rows; ++r)
+      // {
+      //   for (c = 0; c < copyMatrix->cols; ++c)
+      //   {
+      //     printf("%f\t", copyMatrix->data[c][r]);
+      //   }
+      //   printf("\n");
+      // }
 
-      MPI_Send(&copyMatrix->as_vec->data, copyMatrix->as_vec->len, MPI_DOUBLE,
+      MPI_Send(&copyMatrix->as_vec->data[0], copyMatrix->as_vec->len, MPI_DOUBLE,
                i, 1, MPI_COMM_WORLD);
-      printf("copyvec len is %d\n", copyMatrix->as_vec->len);
-      printf("Root process sent data to process#%d\n", i);
       freeMatrix(copyMatrix);
-      printf("Freed matrix.\n");
     }
   }
 
   else {
-    printf("Attempting to recv to b len=%d ...\n", b->as_vec->len);
-    MPI_Recv(&b->as_vec->data, b->as_vec->len, MPI_DOUBLE,
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
              0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     printf("Process %d recieved b-data.\n", rank);
 
@@ -240,7 +234,6 @@ int main(int argc, char** argv)
     }
   }
   freeMatrix(b);
-  printf("Process %d freed matrix b at end.\n", rank);
 
   close_app();
   return 0;
