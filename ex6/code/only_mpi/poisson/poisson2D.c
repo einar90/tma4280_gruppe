@@ -104,6 +104,11 @@ void resetBuffer(Vector buf)
   buf = createVector(n);
 }
 
+void printResults(int omp, int mpi, int N, double runtime, double error)
+{
+  printf("omp %d\nmpi %d\nn %d\nruntime %f\nerror %e\n", omp, mpi, N, runtime, error);
+}
+
 
 
 void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
@@ -114,7 +119,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   int N=b->rows+1;
   Vector lambda;
   Matrix ut = cloneMatrix(b);
-  Vector buf = createVector(4*(b->rows+1));
+  Vector buf;
   int NN=4*N;
   double time;
 
@@ -130,49 +135,43 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
     MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
              0, 100, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-
-    time = WallTime();
-
+#pragma omp parallel for schedule(static) private(buf)
     for (i=0;i<b->cols;++i){
+      buf = createVector(4*(b->rows+1));
       fst(b->data[i], &N, buf->data, &NN);
-      resetBuffer(buf);
+      freeVector(buf);
     }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
   }
 
-
   if (rank == 0)
   {
     recvParts(partlens, displacements, b, N, size, 200);
-    time = WallTime();
     transposeMatrix(ut, b);
 
     distributeCols(partlens, displacements, N, ut, copyMatrix, size, 300);
   }
-
 
   if (rank != 0)
   {
     MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
              0, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    time = WallTime();
-    //ut to b for these ranks, not sure
+#pragma omp parallel for schedule(static) private(buf)
     for (i=0;i<b->cols;++i)
     {
+      buf = createVector(4*(b->rows+1));
       fstinv(b->data[i], &N, buf->data, &NN);
-      resetBuffer(buf);
+      freeVector(buf);
     }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 400, MPI_COMM_WORLD);
   }
 
-
   if (rank == 0)
   {
     recvParts(partlens, displacements, ut, N, size, 400);
-    time = WallTime();
     for (j=0;j<b->cols;++j){
       for (i=0;i<b->rows;++i){
         ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
@@ -182,43 +181,41 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
     distributeCols(partlens, displacements, N, ut, copyMatrix, size, 500);
   }
 
-
   if (rank != 0)
   {
     MPI_Recv(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE,
              0, 500, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    time = WallTime();
+#pragma omp parallel for schedule(static) private(buf)
     for (i=0;i<b->cols;++i)
     {
+      buf = createVector(4*(b->rows+1));
       fst(ut->data[i], &N, buf->data, &NN);
-      resetBuffer(buf);
+      freeVector(buf);
     }
 
     MPI_Send(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE, 0, 600, MPI_COMM_WORLD);
   }
 
-
   if (rank == 0)
   {
     recvParts(partlens, displacements, ut, N, size, 600);
 
-    time = WallTime();
     transposeMatrix(b, ut);
 
     distributeCols(partlens, displacements, N, b, copyMatrix, size, 700);
   }
 
-
   if(rank != 0) {
     MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
              0, 700, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    time = WallTime();
+#pragma omp parallel for schedule(static) private(buf)
     for (i=0;i<ut->cols;++i)
     {
+      buf = createVector(4*(b->rows+1));
       fstinv(b->data[i], &N, buf->data, &NN);
-      resetBuffer(buf);
+      freeVector(buf);
     }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 800, MPI_COMM_WORLD);
@@ -230,7 +227,61 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   }
 
   freeMatrix(ut);
-  freeVector(buf);
+}
+
+void DiagonalizationPoisson2DfstSerial(Matrix b, const Vector lambda)
+{
+  int i,j;
+  int N=b->rows+1;
+  Matrix ut = cloneMatrix(b);
+  Vector buf;
+  int NN=4*N;
+  double time;
+
+#pragma omp parallel for schedule(static) private(buf)
+  for (i=0;i<b->cols;++i)
+  {
+    buf = createVector(4*(b->rows+1));
+    fst(b->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+
+  transposeMatrix(ut, b);
+
+#pragma omp parallel for schedule(static) private(buf)
+  for (i=0;i<ut->cols;++i)
+  {
+    buf = createVector(4*(b->rows+1));
+    fstinv(ut->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+
+  time = WallTime();
+  for (j=0;j<b->cols;++j){
+    for (i=0;i<b->rows;++i){
+      ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
+    }
+  }
+
+#pragma omp parallel for schedule(static) private(buf)
+  for (i=0;i<b->cols;++i)
+  {
+    buf = createVector(4*(b->rows+1));
+    fst(ut->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+
+  transposeMatrix(b, ut);
+
+#pragma omp parallel for schedule(static) private(buf)
+  for (i=0;i<ut->cols;++i)
+  {
+    buf = createVector(4*(b->rows+1));
+    fstinv(b->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+
+  freeMatrix(ut);
 }
 
 int main(int argc, char** argv)
@@ -261,8 +312,8 @@ int main(int argc, char** argv)
 
 
   // Find a split size, exclude one processor as its master and handling send/recv
-
-  if(rank == 0) {
+  if(size == 1) {
+    printf("%s\n", "Running with one prosess, openMP active");
     grid = equidistantMesh(0.0, 1.0, N);
     b = createMatrix(N-1,N-1);
     e = createMatrix(N-1,N-1);
@@ -272,25 +323,59 @@ int main(int argc, char** argv)
     scaleVector(b->as_vec, pow(h, 2));
     evalMeshInternal2(e, grid, exact, local);
     axpy(b->as_vec, e->as_vec, alpha);
+    Vector lambda = generateEigenValuesP1D(N-1);
 
-    time = WallTime();
-  }
+    double time = WallTime();
+    DiagonalizationPoisson2DfstSerial(b, lambda);
+    double runtime = WallTime() - time;
 
-  if (rank != 0) {
-    b = createMatrix(N-1, partlens[rank-1]);
-  }
+    //printRawMatrix(b); // Printing solution
+    axpy(b->as_vec,e->as_vec,-1.0);  // Calculating errors
+    double error = maxNorm(b->as_vec);
+    //printf("max error: %e\n", maxNorm(b->as_vec));
 
-
-
-  DiagonalizationPoisson2Dfst(b, size, rank, status, displacements, partlens);
-
-  if(rank == 0) {
-    printf("elapsed: %f\n", WallTime()-time);
-    printRawMatrix(b); // Printing solution
-    // axpy(b->as_vec,e->as_vec,-1.0);  // Calculating errors
-    // printf("max error: %e\n", maxNorm(b->as_vec));
+    printResults(getMaxThreads(), size, N, runtime, error);
     freeMatrix(e);
     freeVector(grid);
+  }
+  else
+  {
+
+    if(rank == 0) {
+      grid = equidistantMesh(0.0, 1.0, N);
+      b = createMatrix(N-1,N-1);
+      e = createMatrix(N-1,N-1);
+
+      evalMeshInternal2(b, grid, source, local);
+      h = grid->data[1]-grid->data[0];
+      scaleVector(b->as_vec, pow(h, 2));
+      evalMeshInternal2(e, grid, exact, local);
+      axpy(b->as_vec, e->as_vec, alpha);
+
+      time = WallTime();
+    }
+
+    if (rank != 0) {
+      b = createMatrix(N-1, partlens[rank-1]);
+    }
+
+
+
+    DiagonalizationPoisson2Dfst(b, size, rank, status, displacements, partlens);
+
+    if(rank == 0) {
+      double runtime = WallTime() - time;
+      axpy(b->as_vec,e->as_vec,-1.0);  // Calculating errors
+      double error = maxNorm(b->as_vec);
+      printResults(getMaxThreads(), size, N, runtime, error);
+
+      // printf("elapsed: %f\n", WallTime()-time);
+      // printRawMatrix(b); // Printing solution
+      // printf("max error: %e\n", maxNorm(b->as_vec));
+      freeMatrix(e);
+      freeVector(grid);
+    }
+
   }
   freeMatrix(b);
 
