@@ -41,6 +41,20 @@ void safePrintMatrix(Matrix m, int proc_id)
 }
 
 
+void printRawMatrix(Matrix b)
+{
+  int r, c;
+  for (c = 0; c < b->cols; ++c)
+  {
+    for (r = 0; r < b->rows; ++r)
+    {
+      printf("%f ", b->data[c][r]);
+    }
+    printf("\n");
+  }
+}
+
+
 void resetBuffer(Vector buf)
 {
   int n = buf->len;
@@ -58,7 +72,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   double time;
 
   time = WallTime();
-  printf("n is %d, and nn is %d\n", N, NN);
 #pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<b->cols;++i)
   {
@@ -82,7 +95,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
     fstinv(ut->data[i], &N, buf->data, &NN);
     freeVector(buf);
   }
-  // printf("Time spent on first fstinv: %f\n", WallTime() - time);
 
   time = WallTime();
   for (j=0;j<b->cols;++j){
@@ -114,6 +126,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
     fstinv(b->data[i], &N, buf->data, &NN);
     freeVector(buf);
   }
+
   // printf("Time spent on second fstinv: %f\n", WallTime() - time);
 
   freeMatrix(ut);
@@ -158,20 +171,9 @@ int main(int argc, char** argv)
 
 
   printf("elapsed: %f\n", WallTime()-time);
-
-  axpy(b->as_vec,e->as_vec,-1.0);
-
-  printf("max error: %e\n", maxNorm(b->as_vec));
-
-  // for (i = 0; i < b->cols; ++i)
-  // {
-  //   for (j = 0; j < b->rows; ++j)
-  //   {
-  //     printf("%f ", b->data[i][j]);
-  //   }
-  //   printf("\n");
-  // }
-  // printf("%s\n", "BÆSJ");
+  printRawMatrix(b);
+  // axpy(b->as_vec,e->as_vec,-1.0);  // Calculating errors
+  // printf("max error: %e\n", maxNorm(b->as_vec));
 
   freeMatrix(b);
   freeMatrix(e);

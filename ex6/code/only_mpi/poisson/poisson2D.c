@@ -43,6 +43,20 @@ void safePrintMatrix(Matrix m, int proc_id)
 }
 
 
+void printRawMatrix(Matrix b)
+{
+  int r, c;
+  for (c = 0; c < b->cols; ++c)
+  {
+    for (r = 0; r < b->rows; ++r)
+    {
+      printf("%f ", b->data[c][r]);
+    }
+    printf("\n");
+  }
+}
+
+
 Matrix createPartMatrix(int colsToSend, int N, Matrix b, int i, int* displacements)
 {
   int c, r;
@@ -83,6 +97,13 @@ void recvParts(int* partlens, int* displacements, Matrix b, int N, int processor
   }
 }
 
+void resetBuffer(Vector buf)
+{
+  int n = buf->len;
+  freeVector(buf);
+  buf = createVector(n);
+}
+
 
 
 void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
@@ -90,7 +111,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
                                  int *partlens)
 {
   int i,j,k,r,c;
-  int N=b->cols+1;
+  int N=b->rows+1;
   Vector lambda;
   Matrix ut = cloneMatrix(b);
   Vector buf = createVector(4*(b->rows+1));
@@ -100,7 +121,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   Matrix copyMatrix;
 
   if(rank == 0) {
-    safePrintMatrix(b, rank);
     lambda = generateEigenValuesP1D(N-1);
 
     distributeCols(partlens, displacements, N, b, copyMatrix, size, 100);
@@ -112,21 +132,13 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
 
     time = WallTime();
-    for (i=0;i<b->cols;++i)
+
+    for (i=0;i<b->cols;++i){
       fst(b->data[i], &N, buf->data, &NN);
-    //printf("Time spent on first fst: %f\n", WallTime() - time);
+      resetBuffer(buf);
+    }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
-
-    // printf("b after recv for rank %d\n", rank);
-    // for (c = 0; c < b->cols; ++c)
-    // {
-    //   for (r = 0; r < b->rows; ++r)
-    //   {
-    //     printf("%7.4f\t", b->data[c][r]);
-    //   }
-    //   printf("\n");
-    // }
   }
 
 
@@ -134,9 +146,7 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
   {
     recvParts(partlens, displacements, b, N, size, 200);
     time = WallTime();
-    safePrintMatrix(b, rank);
     transposeMatrix(ut, b);
-    //printf("Time spent on first transpose: %f\n", WallTime() - time);
 
     distributeCols(partlens, displacements, N, ut, copyMatrix, size, 300);
   }
@@ -150,7 +160,10 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
     time = WallTime();
     //ut to b for these ranks, not sure
     for (i=0;i<b->cols;++i)
+    {
       fstinv(b->data[i], &N, buf->data, &NN);
+      resetBuffer(buf);
+    }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 400, MPI_COMM_WORLD);
   }
@@ -165,7 +178,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
         ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
       }
     }
-    //printf("Time spent computing lambdas: %f\n", WallTime() - time);
 
     distributeCols(partlens, displacements, N, ut, copyMatrix, size, 500);
   }
@@ -173,14 +185,17 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
   if (rank != 0)
   {
-    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+    MPI_Recv(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE,
              0, 500, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
     time = WallTime();
     for (i=0;i<b->cols;++i)
-      fst(b->data[i], &N, buf->data, &NN);
+    {
+      fst(ut->data[i], &N, buf->data, &NN);
+      resetBuffer(buf);
+    }
 
-    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 600, MPI_COMM_WORLD);
+    MPI_Send(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE, 0, 600, MPI_COMM_WORLD);
   }
 
 
@@ -190,7 +205,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
     time = WallTime();
     transposeMatrix(b, ut);
-    //printf("Time spent on second transpose: %f\n", WallTime() - time);  // freeMatrix(ut);
 
     distributeCols(partlens, displacements, N, b, copyMatrix, size, 700);
   }
@@ -202,7 +216,10 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
     time = WallTime();
     for (i=0;i<ut->cols;++i)
+    {
       fstinv(b->data[i], &N, buf->data, &NN);
+      resetBuffer(buf);
+    }
 
     MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 800, MPI_COMM_WORLD);
   }
@@ -214,32 +231,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
 
   freeMatrix(ut);
   freeVector(buf);
-}
-
-void safePrintMatrix(Matrix m, int proc_id)
-{
-  int rows = m->rows, cols = m->cols;
-
-  char start[32], end[32];
-  sprintf(start, "##   Printing from %d    ##\n", proc_id);
-  sprintf(end,   "## Done printing from %d ##\n", proc_id);
-
-  // 10 digits allocated per number. 1 digit per newline.
-  int bufferLength = 10*rows*cols + 1*rows;
-  int r, c, i, pos;
-  char buf[bufferLength];
-
-  pos = 0;
-  for (r = 0; r < rows; ++r)
-  {
-    for (c = 0; c < cols; ++c)
-    {
-      pos += sprintf(buf + pos, "%8.4f ", m->data[c][r]);
-    }
-    pos += sprintf(buf + pos, "\n");
-  }
-  printf("%s%s%s", start, buf, end);
-
 }
 
 int main(int argc, char** argv)
@@ -261,7 +252,6 @@ int main(int argc, char** argv)
   splitVector(N-1, size-1, &partlens, &displacements);
 
   if (flag == 12 && (N & (N-1)) != 0) {
-    //printf("need N to be a power-of-two for fst-based diagonalization\n");
     return 5;
   }
 
@@ -293,41 +283,14 @@ int main(int argc, char** argv)
 
 
   DiagonalizationPoisson2Dfst(b, size, rank, status, displacements, partlens);
-  //printf("Diagonalization complete on rank %d\n", rank);
-
-
-  if (rank == 0)
-  {
-    //printf("elapsed: %f\n", WallTime()-time);
-  }
-
-  //axpy(b->as_vec,e->as_vec,-1.0);
-
-  //printf("max error: %e\n", maxNorm(b->as_vec));
-
-  // for (i = 0; i < b->rows; ++i)
-  // {
-  //   for (j = 0; j < b->cols; ++j)
-  //   {
-  //     printf("%f ", b->data[i][j]);
-  //   }
-  //   printf("\n");
-  // }
-
 
   if(rank == 0) {
+    printf("elapsed: %f\n", WallTime()-time);
+    printRawMatrix(b); // Printing solution
+    // axpy(b->as_vec,e->as_vec,-1.0);  // Calculating errors
+    // printf("max error: %e\n", maxNorm(b->as_vec));
     freeMatrix(e);
     freeVector(grid);
-
-    //printf("b at end for rank %d\n", rank);
-    for (r = 0; r < b->rows; ++r)
-    {
-      for (c = 0; c < b->cols; ++c)
-      {
-        //printf("%7.4f\t", b->data[c][r]);
-      }
-      //printf("\n");
-    }
   }
   freeMatrix(b);
 
