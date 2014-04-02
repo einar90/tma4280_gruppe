@@ -41,33 +41,49 @@ void safePrintMatrix(Matrix m, int proc_id)
 }
 
 
+void resetBuffer(Vector buf)
+{
+  int n = buf->len;
+  freeVector(buf);
+  buf = createVector(n);
+}
 
 void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
 {
   int i,j;
   int N=b->rows+1;
   Matrix ut = cloneMatrix(b);
-  Matrix buf = createMatrix(N-1,4*(b->rows+1));
+  Vector buf;
   int NN=4*N;
   double time;
+  // safePrintMatrix(b, 8000);
 
   time = WallTime();
-#pragma omp parallel for schedule(static)
+  printf("n is %d, and nn is %d\n", N, NN);
+#pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<b->cols;++i)
-    fst(b->data[i], &N, buf->data[i], &NN);
-  printf("Time spent on first fst: %f\n", WallTime() - time);
+  {
+    buf = createVector(4*(b->rows+1));
+    fst(b->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+  // printf("Time spent on first fst: %f\n", WallTime() - time);
 
-  safePrintMatrix(b, 9000);
+
 
   time = WallTime();
   transposeMatrix(ut, b);
-  printf("Time spent on first transpose: %f\n", WallTime() - time);
+  // printf("Time spent on first transpose: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<ut->cols;++i)
-    fstinv(ut->data[i], &N, buf->data[i], &NN);
-  printf("Time spent on first fstinv: %f\n", WallTime() - time);
+  {
+    buf = createVector(4*(b->rows+1));
+    fstinv(ut->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+  // printf("Time spent on first fstinv: %f\n", WallTime() - time);
 
   time = WallTime();
   for (j=0;j<b->cols;++j){
@@ -75,26 +91,33 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
       ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
     }
   }
-  printf("Time spent computing lambdas: %f\n", WallTime() - time);
+  // printf("Time spent computing lambdas: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<b->cols;++i)
-    fst(ut->data[i], &N, buf->data[i], &NN);
-  printf("Time spent on second fst: %f\n", WallTime() - time);
+  {
+    buf = createVector(4*(b->rows+1));
+    fst(ut->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+  // printf("Time spent on second fst: %f\n", WallTime() - time);
 
   time = WallTime();
   transposeMatrix(b, ut);
-  printf("Time spent on second transpose: %f\n", WallTime() - time);
+  // printf("Time spent on second transpose: %f\n", WallTime() - time);
 
   time = WallTime();
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<ut->cols;++i)
-    fstinv(b->data[i], &N, buf->data[i], &NN);
-  printf("Time spent on second fstinv: %f\n", WallTime() - time);
+  {
+    buf = createVector(4*(b->rows+1));
+    fstinv(b->data[i], &N, buf->data, &NN);
+    freeVector(buf);
+  }
+  // printf("Time spent on second fstinv: %f\n", WallTime() - time);
 
   freeMatrix(ut);
-  freeMatrix(buf);
 }
 
 
@@ -141,14 +164,15 @@ int main(int argc, char** argv)
 
   printf("max error: %e\n", maxNorm(b->as_vec));
 
-  // for (i = 0; i < b->rows; ++i)
-  // {
-  //   for (j = 0; j < b->cols; ++j)
-  //   {
-  //     printf("%f ", b->data[i][j]);
-  //   }
-  //   printf("\n");
-  // }
+  for (i = 0; i < b->cols; ++i)
+  {
+    for (j = 0; j < b->rows; ++j)
+    {
+      printf("%f ", b->data[i][j]);
+    }
+    printf("\n");
+  }
+  // printf("%s\n", "BÆSJ");
 
   freeMatrix(b);
   freeMatrix(e);
