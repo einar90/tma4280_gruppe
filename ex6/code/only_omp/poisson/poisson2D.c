@@ -56,7 +56,6 @@ void DiagonalizationPoisson2Dfst(Matrix b, const Vector lambda)
   Vector buf;
   int NN=4*N;
   double time;
-  // safePrintMatrix(b, 8000);
 
   time = WallTime();
   printf("n is %d, and nn is %d\n", N, NN);
@@ -164,14 +163,14 @@ int main(int argc, char** argv)
 
   printf("max error: %e\n", maxNorm(b->as_vec));
 
-  for (i = 0; i < b->cols; ++i)
-  {
-    for (j = 0; j < b->rows; ++j)
-    {
-      printf("%f ", b->data[i][j]);
-    }
-    printf("\n");
-  }
+  // for (i = 0; i < b->cols; ++i)
+  // {
+  //   for (j = 0; j < b->rows; ++j)
+  //   {
+  //     printf("%f ", b->data[i][j]);
+  //   }
+  //   printf("\n");
+  // }
   // printf("%s\n", "BÆSJ");
 
   freeMatrix(b);
