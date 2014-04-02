@@ -20,29 +20,6 @@ double source(double x, double y)
 }
 
 
-void safePrintMatrix(Matrix m, int proc_id)
-{
-  int rows = m->rows, cols = m->cols;
-  char start[32], end[32];
-  sprintf(start, "##   Printing from %d    ##\n", proc_id);
-  sprintf(end,   "## Done printing from %d ##\n", proc_id);
-  // 10 digits allocated per number. 1 digit per newline.
-  int bufferLength = 10*rows*cols + 1*rows;
-  int r, c, i, pos;
-  char buf[bufferLength];
-  pos = 0;
-  for (r = 0; r < rows; ++r)
-  {
-    for (c = 0; c < cols; ++c)
-    {
-      pos += sprintf(buf + pos, "%8.4f ", m->data[c][r]);
-    }
-    pos += sprintf(buf + pos, "\n");
-  }
-  printf("%s%s%s", start, buf, end);
-}
-
-
 Matrix createPartMatrix(int colsToSend, int N, Matrix b, int i, int* displacements)
 {
   int c, r;
