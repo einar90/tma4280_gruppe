@@ -2,6 +2,7 @@
 mkdir release
 cd release
 
+module load cmake
 module load intelcomp
 module load openmpi/1.4.3-intel
 
