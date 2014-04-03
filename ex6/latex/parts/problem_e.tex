@@ -1,1 +1,8 @@
 % -*- root: ../ex6.tex -*-
+
+\section{Modification of given data} % (fold)
+\label{sec:modification_of_given_data}
+Our solver can solve for different seed functions $f(x,y)$ by doing a small modification of the source code. By changing the function \texttt{source} in \texttt{poisson2D.c} it will populate \textbf{B} with the correct given data before solving the system. If you want to be able to see the error you will also have to change \texttt{exact} so that it will calculate the correct error. 
+
+There is a restriction to which seed functions $f(x,y)$ you can use as they have to satisfy the boundary conditions given by $u \eq 0$ on $\partial\Omega$.	
+% section modification_of_given_data (end)
