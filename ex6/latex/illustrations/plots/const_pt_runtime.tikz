@@ -10,7 +10,7 @@
         \addlegendimage{color=black};
         \addlegendimage{color=black,densely dashed};
         \foreach \x  in {1,2,...,10} {
-          \addplot[]
+          \addplot[mark=x]
               table[
                       x=n,
                       y=runtime,

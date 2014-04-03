@@ -7,7 +7,7 @@
         ylabel={$\eta = S_p / P$},
         xmin=0,
         ]
-          \addplot[]
+          \addplot[mark=x]
               table[
                       col sep=tab,
                       x=p,

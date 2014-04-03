@@ -7,7 +7,7 @@
         ylabel={$S_p = \tau_1 / \tau_p$},
         xmin=0,
         ]
-          \addplot[]
+          \addplot[mark=x]
               table[
                       col sep=tab,
                       x=p,

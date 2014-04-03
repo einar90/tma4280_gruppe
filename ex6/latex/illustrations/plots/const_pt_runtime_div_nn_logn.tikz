@@ -5,9 +5,11 @@
         title={},
         xlabel={$N$},
         ylabel={$\tau / (N^2\ln{N})$},
+        ymode=log,
+        xmode=log,
         ]
         \foreach \x  in {1,2,...,10} {
-          \addplot[]
+          \addplot[mark=x]
               table[
                       x=n,
                       y expr=\thisrowno{1}/(\thisrowno{0}^2*ln(\thisrowno{0})),
