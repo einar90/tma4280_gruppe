@@ -1,1 +1,104 @@
 % -*- root: ../ex6.tex -*-
+
+\subsection{Part g: solving on larger domains}
+This far, we have found solutions for the unit square $(0, 1) \times (0,1)$. We will now consider a general rectangular surface $(0, L_x) \times (0,L_y)$. This gives new finite differences. Given division into $n+1$ subintervals in both directions, we have
+% Introduce the dimensionless variables $\hat{x}$ and $\hat{y}$:
+
+% \begin{align}
+% \hat{x} &= \frac{x}{L_x} \\
+% \hat{y} &= \frac{y}{L_y}
+% \end{align}
+
+% Calculate the new differentials:
+
+% \begin{align}
+% \frac{\partial}{\partial x} &= \frac{1}{L_x} \frac{\partial}{\partial \hat{x}} \\
+% \frac{\partial}{\partial y} &= \frac{1}{L_y} \frac{\partial}{\partial \hat{y}}
+% \end{align}
+
+% And insert these into the Poisson equation gives
+
+% \begin{equation}
+% -\left(
+% 	\frac{1}{L_x^2} \frac{\partial^2}{{\partial \hat{x}}^2}
+% 	+ \frac{1}{L_y^2} \frac{\partial^2}{{\partial \hat{y}}^2}
+% \right) u = f(x,y)
+% \end{equation}
+
+\begin{align}
+h_x &= \frac{L_x}{n} \\
+h_y &= \frac{L_y}{n}
+\end{align}
+
+We use the sine solution strategy as described by the lecture notes. We define the matrices $\mathbf{U}$ and $\mathbf{T}$ as
+
+\begin{equation}
+  \mathbf{{U}} = 
+  \begin{bmatrix}
+    u_{1,1} & \ldots & \ldots & u_{1,n-1} \\
+    \vdots & & & \vdots \\
+    \vdots & & & \vdots \\
+    u_{n-1,1} & \ldots & \ldots & u_{n-1,n-1}
+  \end{bmatrix}
+\end{equation}
+\begin{equation}
+  \mathbf{{T}} = 
+  \begin{bmatrix}
+    2 & -1 & & & 0 \\
+    -1 & 2 & -1 & & \\
+    & & \ddots & & \\
+    & & -1 & 2 & -1 \\
+    0 & & & -1 & 2
+  \end{bmatrix}.
+\end{equation}
+
+Premultiplying $\mathbf{U}$ with $\mathbf{T}$ gives
+
+\begin{alignat*}{2}
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= 2u_{i,j} - u_{i+1,j}, &\qquad &i=1, \\
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j} - u_{i+1,j}, &\qquad 2 \leq &i \leq n-2, \\
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j}, &\qquad &i=n-1.
+\end{alignat*}
+
+Analogously, postmultiplying with $\mathbf{T}$ gives
+
+\begin{alignat*}{2}
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= 2u_{i,j} - u_{i,j+1}, &\qquad &i=1, \\
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j} - u_{i,j+1}, &\qquad 2 \leq &i \leq n-2, \\
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j}, &\qquad &i=n-1.
+\end{alignat*}
+
+We observe that, when using the five point stencil, 
+
+\begin{align}
+  \frac{1}{h_x^2} (\mathbf{{T}} \, \mathbf{{U}})_{ij} \approx -\left( \frac{\partial^2 u}{\partial x^2} \right)_{i,j}
+\end{align}
+
+\begin{align}
+  \frac{1}{h_y^2} (\mathbf{{U}} \, \mathbf{{T}})_{ij} \approx -\left( \frac{\partial^2 u}{\partial y^2} \right)_{i,j}
+\end{align}
+
+\ldots wich differs from the expressions we have on the unit square. We may now use these approximations for discretization:
+
+\begin{equation}
+\begin{array}{ccl}
+	-\frac{\partial^2 }{\partial x^2} u &-\frac{\partial^2}{\partial y^2} u &= f \\
+  \frac{1}{h_x^2}(\mathbf{{T}} \, \mathbf{{U}})_{ij} &+\frac{1}{h_y^2} (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= f_{i,j} \\
+	(\mathbf{{T}} \, \mathbf{{U}})_{ij} &+\frac{h_x^2}{h_y^2} (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= f_{i,j} h_x^2
+\end{array}
+\end{equation}
+
+Because we cannot extract a common factor $\frac{1}{h^2}$ out of the left expression, we cannot move $\frac{1}{h^2}$ to the right side of the equation, unless $h_x = h_y$. Let $\frac{h_x^2}{h_y^2} = \beta$:
+
+\begin{equation}
+(\mathbf{{T}} \, \mathbf{{U}})_{ij} +\beta (\mathbf{{U}} \, \mathbf{{T}})_{ij} = f_{i,j} h_x^2
+\end{equation}
+
+This equation may be solved as the unit square poisson 2D case, given the eigenvalues. We may use the sine transform, but need a different solution because we are no longer on the unit square. In the 1D case, we may use 
+
+\begin{align}
+  \mathbf{u}_j^x(x) &= \sin(\frac{j \pi x}{L_x}) \\
+  \mathbf{u}_j^y(y) &= \sin(\frac{j \pi y}{L_y})
+\end{align}
+
+Because the lengths vary between x and y, we have to find different eigenvalues to diagonalize the contributions from the $x$ and $y$ contributions to the equation system.
