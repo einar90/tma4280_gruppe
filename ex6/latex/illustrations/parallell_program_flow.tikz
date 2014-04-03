@@ -1,0 +1,191 @@
+% -*- root: ../ex6.tex -*-
+
+\begin{tikzpicture}
+  % dummy node
+  \node [] at ($ (0,0) + (\textwidth, 0) $) {};
+
+  % Init line
+  \node [dot,rectangle] (start) at (0,0){};
+  \node [dot] (branch_1) at (2,0) {};
+  \draw [] (start.center) -- (branch_1.center) node [midway, fill=white]{0:init};
+
+
+
+
+
+  % First branched fst
+  \node [dot] (fst1_11) at (3,2) {};
+  \node [dot] (fst1_12) at (5.5,2) {};
+  \draw [] (fst1_11.center) -- (fst1_12.center) node [midway, fill=white]{1:$S$};
+
+  \node [dot] (fst1_21) at (3,1) {};
+  \node [dot] (fst1_22) at (5.5,1) {};
+  \draw [] (fst1_21.center) -- (fst1_22.center) node [midway, fill=white]{2:$S$};
+
+  \node [dot] (fst1_31) at (3,-1) {};
+  \node [dot] (fst1_32) at (5.5,-1) {};
+  \draw [] (fst1_31.center) -- (fst1_32.center) node [midway, fill=white]{3:$S$};
+
+  \node [dot] (fst1_41) at (3,-2) {};
+  \node [dot] (fst1_42) at (5.5,-2) {};
+  \draw [] (fst1_41.center) -- (fst1_42.center) node [midway, fill=white]{4:$S$};
+
+  \draw [] (branch_1.center) -- (fst1_11.center) {};
+  \draw [] (branch_1.center) -- (fst1_21.center) {};
+  \draw [] (branch_1.center) -- (fst1_31.center) {};
+  \draw [] (branch_1.center) -- (fst1_41.center) {};
+
+  \node [dot] (gather_1) at (6.5,0) {};
+
+  \draw [] (fst1_12.center) -- (gather_1.center) {};
+  \draw [] (fst1_22.center) -- (gather_1.center) {};
+  \draw [] (fst1_32.center) -- (gather_1.center) {};
+  \draw [] (fst1_42.center) -- (gather_1.center) {};
+
+  \draw [] (branch_1.center) -- (gather_1.center) node [midway, fill=white] {0:idle};
+
+
+
+
+
+  % Transpose
+  \node [dot] (branch_2) at (8.5,0) {};
+  \draw [] (gather_1.center) -- (branch_2.center) node [midway, fill=white] {0:$T$};
+
+
+
+
+
+  % First ifst
+  \node [dot] (ifst1_11) at (9.5,2) {};
+  \node [dot] (ifst1_12) at (12,2) {};
+  \draw [] (ifst1_11.center) -- (ifst1_12.center) node [midway, fill=white]{1:$S^{-1}$};
+
+  \node [dot] (ifst1_21) at (9.5,1) {};
+  \node [dot] (ifst1_22) at (12,1) {};
+  \draw [] (ifst1_21.center) -- (ifst1_22.center) node [midway, fill=white]{2:$S^{-1}$};
+
+  \node [dot] (ifst1_31) at (9.5,-1) {};
+  \node [dot] (ifst1_32) at (12,-1) {};
+  \draw [] (ifst1_31.center) -- (ifst1_32.center) node [midway, fill=white]{3:$S^{-1}$};
+
+  \node [dot] (ifst1_41) at (9.5,-2) {};
+  \node [dot] (ifst1_42) at (12,-2) {};
+  \draw [] (ifst1_41.center) -- (ifst1_42.center) node [midway, fill=white]{4:$S^{-1}$};
+
+  \draw [] (branch_2.center) -- (ifst1_11.center) {};
+  \draw [] (branch_2.center) -- (ifst1_21.center) {};
+  \draw [] (branch_2.center) -- (ifst1_31.center) {};
+  \draw [] (branch_2.center) -- (ifst1_41.center) {};
+
+  \node [dot] (gather_2) at (13,0) {};
+
+  \draw [] (ifst1_12.center) -- (gather_2.center) {};
+  \draw [] (ifst1_22.center) -- (gather_2.center) {};
+  \draw [] (ifst1_32.center) -- (gather_2.center) {};
+  \draw [] (ifst1_42.center) -- (gather_2.center) {};
+
+  \draw [] (branch_2.center) -- (gather_2.center) node [midway, fill=white] {0:idle};
+
+
+  % Continuation
+  \draw [densely dotted] (gather_2.center) -- (14.5,0) {};
+
+
+
+
+
+  \node [] (line2_start) at (0,-5) {};
+  \node [] (line2_start2) at (0.5,-5) {};
+  \node [dot] (branch_3) at (2,-5) {};
+  \draw [densely dotted] (line2_start.center) -- (line2_start2.center) {};
+  \draw [] (line2_start2.center) -- (branch_3.center) node [midway, fill=white] {0:$\lambda$};
+
+
+
+
+    % Second branched fst
+  \node [dot] (fst2_11) at (3,-3) {};
+  \node [dot] (fst2_12) at (5.5,-3) {};
+  \draw [] (fst2_11.center) -- (fst2_12.center) node [midway, fill=white]{1:$S$};
+
+  \node [dot] (fst2_21) at (3,-4) {};
+  \node [dot] (fst2_22) at (5.5,-4) {};
+  \draw [] (fst2_21.center) -- (fst2_22.center) node [midway, fill=white]{2:$S$};
+
+  \node [dot] (fst2_31) at (3,-6) {};
+  \node [dot] (fst2_32) at (5.5,-6) {};
+  \draw [] (fst2_31.center) -- (fst2_32.center) node [midway, fill=white]{3:$S$};
+
+  \node [dot] (fst2_41) at (3,-7) {};
+  \node [dot] (fst2_42) at (5.5,-7) {};
+  \draw [] (fst2_41.center) -- (fst2_42.center) node [midway, fill=white]{4:$S$};
+
+  \draw [] (branch_3.center) -- (fst2_11.center) {};
+  \draw [] (branch_3.center) -- (fst2_21.center) {};
+  \draw [] (branch_3.center) -- (fst2_31.center) {};
+  \draw [] (branch_3.center) -- (fst2_41.center) {};
+
+  \node [dot] (gather_3) at (6.5,-5) {};
+
+  \draw [] (fst2_12.center) -- (gather_3.center) {};
+  \draw [] (fst2_22.center) -- (gather_3.center) {};
+  \draw [] (fst2_32.center) -- (gather_3.center) {};
+  \draw [] (fst2_42.center) -- (gather_3.center) {};
+
+  \draw [] (branch_3.center) -- (gather_3.center) node [midway, fill=white] {0:idle};
+
+
+
+
+  % Second transpose
+  \node [dot] (branch_4) at (8.5, -5) {};
+  \draw [] (gather_3.center) -- (branch_4.center) node [midway, fill=white] {0:$T$};
+
+
+
+
+
+
+
+  % First ifst
+  \node [dot] (ifst2_11) at (9.5,-4) {};
+  \node [dot] (ifst2_12) at (12,-4) {};
+  \draw [] (ifst2_11.center) -- (ifst2_12.center) node [midway, fill=white]{1:$S^{-1}$};
+
+  \node [dot] (ifst2_21) at (9.5,-3) {};
+  \node [dot] (ifst2_22) at (12,-3) {};
+  \draw [] (ifst2_21.center) -- (ifst2_22.center) node [midway, fill=white]{2:$S^{-1}$};
+
+  \node [dot] (ifst2_31) at (9.5,-6) {};
+  \node [dot] (ifst2_32) at (12,-6) {};
+  \draw [] (ifst2_31.center) -- (ifst2_32.center) node [midway, fill=white]{3:$S^{-1}$};
+
+  \node [dot] (ifst2_41) at (9.5,-7) {};
+  \node [dot] (ifst2_42) at (12,-7) {};
+  \draw [] (ifst2_41.center) -- (ifst2_42.center) node [midway, fill=white]{4:$S^{-1}$};
+
+  \draw [] (branch_4.center) -- (ifst2_11.center) {};
+  \draw [] (branch_4.center) -- (ifst2_21.center) {};
+  \draw [] (branch_4.center) -- (ifst2_31.center) {};
+  \draw [] (branch_4.center) -- (ifst2_41.center) {};
+
+  \node [dot] (gather_4) at (13,-5) {};
+
+  \draw [] (ifst2_12.center) -- (gather_4.center) {};
+  \draw [] (ifst2_22.center) -- (gather_4.center) {};
+  \draw [] (ifst2_32.center) -- (gather_4.center) {};
+  \draw [] (ifst2_42.center) -- (gather_4.center) {};
+
+  \draw [] (branch_4.center) -- (gather_4.center) node [midway, fill=white] {0:idle};
+
+
+
+  \node [dot, rectangle] (finish) at (14.5, -5) {};
+  \draw [] (gather_4.center) -- (finish.center) {};
+
+
+
+
+
+\end{tikzpicture}
