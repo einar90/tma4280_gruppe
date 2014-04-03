@@ -38,3 +38,4 @@ _release/*
 _release/
 *_build/
 *.ptex
+ex6/code/parallell_poisson/poisson/release/
