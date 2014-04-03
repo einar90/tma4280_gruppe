@@ -37,3 +37,4 @@ _debug
 _release/*
 _release/
 *_build/
+*.ptex
