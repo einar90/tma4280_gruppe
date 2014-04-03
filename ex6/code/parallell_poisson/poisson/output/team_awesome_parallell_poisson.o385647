@@ -1,0 +1,49 @@
+chown: cannot access `/state/partition1/scratch/pbstmp.385647.rocks.hpc.ntnu.no': No such file or directory
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 128
+runtime 0.046903
+error 4.075006e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 256
+runtime 0.052022
+error 1.018807e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 512
+runtime 0.152275
+error 2.547071e-06
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 1024
+runtime 0.538435
+error 6.367676e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 2048
+runtime 2.295788
+error 1.591986e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 4096
+runtime 9.482708
+error 3.979514e-08
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 8192
+runtime 38.334540
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 16384
+runtime 153.333776
+error 1.876114e-09

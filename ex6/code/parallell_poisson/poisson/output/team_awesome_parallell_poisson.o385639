@@ -1,0 +1,53 @@
+chown: cannot access `/state/partition1/scratch/pbstmp.385639.rocks.hpc.ntnu.no': No such file or directory
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 128
+runtime 0.045491
+error 4.075006e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 256
+runtime 0.074437
+error 1.018807e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 512
+runtime 0.150297
+error 2.547071e-06
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 1024
+runtime 0.555070
+error 6.367676e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 2048
+runtime 2.267380
+error 1.591986e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 4096
+runtime 9.328630
+error 3.979514e-08
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 8192
+runtime 38.308257
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+=>> PBS: job killed: walltime 96 exceeded limit 60
+mpirun: killing job...
+
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 3003 on node compute-0-11.local exited on signal 0 (Unknown signal 0).
+--------------------------------------------------------------------------
+mpirun: clean termination accomplished
+
+6 total processes killed (some possibly by mpirun during cleanup)

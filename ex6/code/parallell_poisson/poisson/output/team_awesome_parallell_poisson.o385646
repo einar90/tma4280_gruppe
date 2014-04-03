@@ -1,0 +1,53 @@
+Warning: Permanently added 'compute-0-12' (RSA) to the list of known hosts.
+chown: cannot access `/state/partition1/scratch/pbstmp.385646.rocks.hpc.ntnu.no': No such file or directory
+Warning: Permanently added 'compute-0-13' (RSA) to the list of known hosts.
+chown: cannot access `/state/partition1/scratch/pbstmp.385646.rocks.hpc.ntnu.no': No such file or directory
+Warning: Permanently added 'compute-0-3' (RSA) to the list of known hosts.
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 128
+runtime 0.050242
+error 4.075006e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 256
+runtime 0.059119
+error 1.018807e-05
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 512
+runtime 0.140804
+error 2.547071e-06
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 1024
+runtime 0.545215
+error 6.367676e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 2048
+runtime 2.403820
+error 1.591986e-07
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 4096
+runtime 9.769746
+error 3.979514e-08
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 8192
+runtime 38.844264
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 16384
+runtime 156.055147
+error 1.876114e-09

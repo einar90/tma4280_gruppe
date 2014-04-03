@@ -1,0 +1,123 @@
+Warning: Permanently added 'compute-0-1' (RSA) to the list of known hosts.
+chown: cannot access `/state/partition1/scratch/pbstmp.386070.rocks.hpc.ntnu.no': No such file or directory
+chown: cannot access `/state/partition1/scratch/pbstmp.386070.rocks.hpc.ntnu.no': No such file or directory
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 24
+n 16384
+runtime 157.365175
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 24
+n 16384
+runtime 164.257942
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 24
+n 16384
+runtime 158.592166
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 24
+n 16384
+runtime 158.667709
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 24
+n 16384
+runtime 154.638378
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 18
+n 16384
+runtime 153.234946
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 18
+n 16384
+runtime 150.962389
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 18
+n 16384
+runtime 151.793586
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 18
+n 16384
+runtime 146.502481
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 18
+n 16384
+runtime 146.009243
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 12
+n 16384
+runtime 149.740770
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 12
+n 16384
+runtime 148.029205
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 12
+n 16384
+runtime 147.167745
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 12
+n 16384
+runtime 145.301737
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 12
+n 16384
+runtime 143.360202
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 6
+n 16384
+runtime 157.268637
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 6
+n 16384
+runtime 153.630168
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 16384
+runtime 153.733214
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 6
+n 16384
+runtime 154.214797
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 6
+n 16384
+runtime 162.046432
+error 1.876114e-09
