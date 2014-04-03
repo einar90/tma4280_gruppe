@@ -1,0 +1,19 @@
+% -*- root: ../../ex6.tex -*-
+
+\begin{tikzpicture}[font = \sffamily]
+    \begin{axis}[
+        title={Plot of error vs. $N$},
+        xlabel={$N$},
+        ylabel={$error$},
+        xmode=log,
+        ymode=log,
+        ]
+          \addplot[]
+              table[
+                      x=n,
+                      y=error,
+                      col sep=tab,
+                   ]
+              {output_clean/const_pt_1};
+      \end{axis}
+\end{tikzpicture}

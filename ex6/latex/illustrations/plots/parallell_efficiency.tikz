@@ -1,0 +1,20 @@
+% -*- root: ../../ex6.tex -*-
+
+\begin{tikzpicture}[font = \sffamily]
+    \begin{axis}[
+        title={Parallell efficiency},
+        xlabel={$P$},
+        ylabel={$\eta = S_p / P$},
+        xmin=0,
+        ]
+          \addplot[]
+              table[
+                      col sep=tab,
+                      x=p,
+                      y expr={794.640097/\thisrowno{3} / \thisrowno{0}},
+                   ]
+              {output_clean/const_n_16384_mod};
+      \end{axis}
+\end{tikzpicture}
+
+% NOTE: Outlying values are removed from the data set (ugunstuge #mpi/#omp forhold)

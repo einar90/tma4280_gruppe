@@ -1,0 +1,5 @@
+omp 1
+mpi 1
+n 16384
+runtime 794.640097
+error 1.876114e-09
