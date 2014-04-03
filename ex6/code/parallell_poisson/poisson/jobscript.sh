@@ -1,7 +1,7 @@
 #!/bin/bash
 #PBS -N team_awesome_parallell_poisson
 #PBS -lnodes=3:ppn=12:default
-#PBS -lwalltime=00:00:10
+#PBS -lwalltime=00:15:00
 #PBS -lpmem=2000MB
 #PBS -A freecycle
 #PBS -q optimist
