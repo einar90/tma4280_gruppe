@@ -1,0 +1,28 @@
+aquired MPI threading level: MPI_THREAD_SINGLE
+Running with one prosess, openMP active
+omp 1
+mpi 1
+n 8192
+runtime 185.454892
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+Running with one prosess, openMP active
+omp 1
+mpi 1
+n 8192
+runtime 185.475297
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+Running with one prosess, openMP active
+omp 1
+mpi 1
+n 8192
+runtime 185.358550
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+Running with one prosess, openMP active
+omp 1
+mpi 1
+n 8192
+runtime 185.470003
+error 9.804214e-09

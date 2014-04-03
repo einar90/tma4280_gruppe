@@ -1,0 +1,6 @@
+const_clean_*:
+OMP=6
+MPI=6
+
+const_n_1:
+n = 16384

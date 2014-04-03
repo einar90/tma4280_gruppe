@@ -1,0 +1,123 @@
+chown: cannot access `/state/partition1/scratch/pbstmp.386230.rocks.hpc.ntnu.no': No such file or directory
+chown: cannot access `/state/partition1/scratch/pbstmp.386230.rocks.hpc.ntnu.no': No such file or directory
+Warning: Permanently added 'compute-0-25' (RSA) to the list of known hosts.
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 24
+n 8192
+runtime 38.042613
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 24
+n 8192
+runtime 37.451174
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 24
+n 8192
+runtime 39.053992
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 24
+n 8192
+runtime 38.525098
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 24
+n 8192
+runtime 38.217664
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 18
+n 8192
+runtime 37.084081
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 18
+n 8192
+runtime 36.717456
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 18
+n 8192
+runtime 36.501376
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 18
+n 8192
+runtime 36.491077
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 18
+n 8192
+runtime 35.932689
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 12
+n 8192
+runtime 36.175115
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 12
+n 8192
+runtime 36.366389
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 12
+n 8192
+runtime 36.999095
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 12
+n 8192
+runtime 35.912295
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 12
+n 8192
+runtime 35.749272
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 12
+mpi 6
+n 8192
+runtime 39.196334
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 8
+mpi 6
+n 8192
+runtime 38.450288
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 6
+mpi 6
+n 8192
+runtime 38.585107
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 6
+n 8192
+runtime 38.258270
+error 9.804214e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 3
+mpi 6
+n 8192
+runtime 39.804602
+error 9.804214e-09
