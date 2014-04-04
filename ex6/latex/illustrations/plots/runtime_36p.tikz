@@ -1,0 +1,26 @@
+% -*- root: ../../ex6.tex -*-
+
+\begin{tikzpicture}[font = \sffamily]
+    \begin{axis}[
+        title={Plot of runtime vs. number of MPI processes $P$ and OpenMP Threads $T$. $P\cdot T=36$},
+        xlabel={$P,T$},
+        ylabel={$\tau$},
+        ]
+          \addplot[color=red, mark=x]
+              table[
+                      x=mpi,
+                      y=runtime,
+                      col sep=tab,
+                   ]
+              {output_clean/const_n_16384_mod_36p};
+          \addlegendentry{Increasing $P$};
+          \addplot[color=blue, mark=x]
+              table[
+                      x=omp,
+                      y=runtime,
+                      col sep=tab,
+                   ]
+              {output_clean/const_n_16384_mod_36p};
+          \addlegendentry{Increasing $T$};
+      \end{axis}
+\end{tikzpicture}

@@ -44,15 +44,15 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
 
 \begin{equation}
   \begin{bmatrix}
-    4 & -1      & & & & & & & 0 \\
-    -1 & 4 & \ddots &      & & & & & \vdots \\
+    4 & -1      & 0 & \ldots & 0 & -1 & 0 & \ldots & 0 \\
+    -1 & 4 & \ddots & \ddots & & \ddots & \ddots & \ddots & \vdots \\
     0 & \ddots      & 4 & & & & & & 0 \\
     \vdots & \ddots & & 4 & & & & & -1 \\
-    0 & \ddots      & & & 4 & & & & 0 \\
+    0 &       & & & 4 & & & & 0 \\
     -1 & \ddots     & & & & 4 & & & \vdots \\
     0 & \ddots      & & & & & 4 & & \\
     \vdots & \ddots & & & & & & 4 & -1 \\
-    0 & \ddots      & & & & & & & 4 \\
+    0 &       & & & & & & & 4 \\
   \end{bmatrix}
   \times
   \begin{bmatrix}
@@ -65,13 +65,13 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
   \end{bmatrix}
 \end{equation}
 
-... which may be solved in a number of ways.
+The general equation $\mathbf{A} \mathbf{x} = \mathbf{b}$ may be solved in a number of ways. When we utilize problem properties, we have more options.
 
 \subsection{Equation solvers}
 We will look at \emph{direct} and \emph{indirect} solvers for linear systems. A direct solver finds an exact solution in finite time, whereas an indirect solver \emph{iterates} on a solution until the error is acceptable.
 
 \subsubsection{Direct solvers}
-\paragraph*{Gauss-Jacobi} is a simple, direct method for any linear system $\mathbf{A}\mathbf{x} = \mathbf{b}$ which uses row reduction. It is often used in hand calculations. It is prone to roundoff errors, and there is no way to reuse the computations for different $\mathbf{b}$s. 
+\paragraph*{Gaussian elimination} is a simple, direct method for any linear system $\mathbf{A}\mathbf{x} = \mathbf{b}$ which uses row reduction. It is often used in hand calculations. Gaussian elimination suffers from numerical instability: small diagonal elements lead to dividing by a very small number, which reduces accuracy. Gaussian elimination has speed cost of $\mathcal{O}(N^3) = \mathcal{O}(n^6)$, and there is no way to reuse the computations for different $\mathbf{b}$s. We can do better.
 
 \paragraph*{LU-factorization} is better suited for computational use than Gauss-Jacobi. The first step is to factorize the matrix into a lower triangular part $\mathbf{L}$ and an upper triangular part $\mathbf{U}$:
 
@@ -86,9 +86,10 @@ We can then solve the system using the substitution $\mathbf{z} = \mathbf{U} \ma
   \mathbf{L} &\mathbf{z} = \mathbf{b}.
 \end{align}
 
-We then find $\mathbf{z} = \mathbf{L}^{-1} \mathbf{b}$, then $\mathbf{x} = \mathbf{U}^{-1} \mathbf{z}$. These are cheap operations compared to $\mathbf{A} = \mathbf{L} \mathbf{U}$, which may be reused.
+We then find $\mathbf{z} = \mathbf{L}^{-1} \mathbf{b}$, then $\mathbf{x} = \mathbf{U}^{-1} \mathbf{z}$. Inverting lower and upper triangular matrices is cheap compared to the factorization $\mathbf{A} = \mathbf{L} \mathbf{U}$, which may be reused for different $\mathbf{b}$s.
 
 \subsubsection{Indirect solvers}
+
 
 \begin{figure}[htbp]
   \centering
