@@ -11,10 +11,9 @@ There are two possible improvements that can be done here. If you need to be abl
 
 The other possible improvement is to make every prosess responsible for distributing its own data to all the other prosesses. As every prosess has access to the \texttt{partlens} they would all be aware of how much data is going to be sent/recieved by all the other prosesses. This could be implemented in the same fashion as mentioned earlier with every prosess having its own matrix in memory, or by a more complex solution where every process only recieves the data it expects (parts of columns from other prosesses) and nothing else, but this requires more complex code. The more complex solution would open for less memory usage as every prosess would not need to have the full matrix in memory. 
 
-% Include figure matrix_blocktranspose.pdf
 \begin{figure}[htbp]
 	\centering
-	\includegraphics[width=0.95\textwidth]{illustrations/matrix_blocktranspose.pdf}
+	\includegraphics[width=0.95\textwidth, angle=90]{illustrations/matrix_blocktranspose.pdf}
 	\caption{The transpose operation using message passing: the packing and unpacking
 of data. The figure is due to Bjarte Hægland.}
 	\label{fig:label}
