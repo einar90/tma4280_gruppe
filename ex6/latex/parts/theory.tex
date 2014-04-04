@@ -13,7 +13,31 @@ Expanding equation \eqref{eq:poisson2d}:
 \begin{equation}
   -u_{xx} - u_{yy} = f(x,y) \label{eq:poisson2d_expanded}
 \end{equation}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[]{illustrations/stencils.pdf}
+  \caption{Illustration of the standard 5-point stencil.}
+  \label{fig:stencil}
+\end{figure}
+
 Discretizing equation \eqref{eq:poisson2d_expanded} using a mesh like the one illustrated in Figure~\ref{fig:mesh} standard 5-point stencil illustrated in Figure~\ref{fig:stencil}:
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{illustrations/mesh.pdf}
+  \caption{An illustration of a general two-dimensional mesh.}
+  \label{fig:mesh}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{illustrations/equation_numbering.pdf}
+  \caption{The numbering scheme used.}
+  \label{fig:numbering_scheme}
+\end{figure}
+
+
 \begin{equation}
   \nonumber
   - \frac{u_{i-1,j} - 2u_{i,j} + u_{i+1,j}}{h^2} - \frac{u_{i,j-1} - 2u_{i,j} + u_{i,j+1}}{h^2} = f_{i,j}
@@ -45,13 +69,13 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
 \begin{equation}
   \begin{bmatrix}
     4 & -1      & 0 & \ldots & 0 & -1 & 0 & \ldots & 0 \\
-    -1 & 4 & \ddots & \ddots & & \ddots & \ddots & \ddots & \vdots \\
-    0 & \ddots      & 4 & & & & & & 0 \\
-    \vdots & \ddots & & 4 & & & & & -1 \\
-    0 &       & & & 4 & & & & 0 \\
-    -1 & \ddots     & & & & 4 & & & \vdots \\
-    0 & \ddots      & & & & & 4 & & \\
-    \vdots & \ddots & & & & & & 4 & -1 \\
+    -1 & \ddots & \ddots & \ddots & & \ddots & \ddots & \ddots & \vdots \\
+    0 & \ddots      &    & & & & & & 0 \\
+    \vdots & \ddots & &    & & & & & -1 \\
+    0 &       & & &    & & & & 0 \\
+    -1 & \ddots     & & & &    & & & \vdots \\
+    0 & \ddots      & & & & &    & & \\
+    \vdots & \ddots & & & & & &    & -1 \\
     0 &       & & & & & & & 4 \\
   \end{bmatrix}
   \times
@@ -68,7 +92,7 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
 The general equation $\mathbf{A} \mathbf{x} = \mathbf{b}$ may be solved in a number of ways. When we utilize problem properties, we have more options.
 
 \subsection{Equation solvers}
-We will look at \emph{direct} and \emph{indirect} solvers for linear systems. A direct solver finds an exact solution in finite time, whereas an indirect solver \emph{iterates} on a solution until the error is acceptable.
+We will look at \emph{direct} and \emph{iterative} solvers for linear systems. A direct solver finds an exact solution in finite time, whereas an indirect solver \emph{iterates} on a solution until the error is acceptable.
 
 \subsubsection{Direct solvers}
 \paragraph*{Gaussian elimination} is a simple, direct method for any linear system $\mathbf{A}\mathbf{x} = \mathbf{b}$ which uses row reduction. It is often used in hand calculations. Gaussian elimination suffers from numerical instability: small diagonal elements lead to dividing by a very small number, which reduces accuracy. Gaussian elimination has speed cost of $\mathcal{O}(N^3) = \mathcal{O}(n^6)$, and there is no way to reuse the computations for different $\mathbf{b}$s. We can do better.
@@ -82,35 +106,96 @@ We will look at \emph{direct} and \emph{indirect} solvers for linear systems. A 
 We can then solve the system using the substitution $\mathbf{z} = \mathbf{U} \mathbf{x}$
 
 \begin{align}
-  \mathbf{A} \mathbf{x} = \mathbf{L} &\mathbf{U} \mathbf{x} = \mathbf{b} \\
-  \mathbf{L} &\mathbf{z} = \mathbf{b}.
+  \mathbf{A} \mathbf{x} = \mathbf{L} \mathbf{U} \mathbf{x} &= \mathbf{b} \\
+  \mathbf{L} \mathbf{z} &= \mathbf{b}.
 \end{align}
 
 We then find $\mathbf{z} = \mathbf{L}^{-1} \mathbf{b}$, then $\mathbf{x} = \mathbf{U}^{-1} \mathbf{z}$. Inverting lower and upper triangular matrices is cheap compared to the factorization $\mathbf{A} = \mathbf{L} \mathbf{U}$, which may be reused for different $\mathbf{b}$s.
 
-\subsubsection{Indirect solvers}
+Full LU factorization also has speed cost of $\mathcal{O}(N^3) = \mathcal{O}(n^6)$. Using banded reduces this to $\mathcal{O}(N b^2) = \mathcal{O}(n^4)$, given $b \sim \mathcal{O}(n)$.
 
+\subsubsection{Iterative solvers}
+Given exact arithmetic, a direct method gives an exact solution to the problem. Iterative solvers, on the other hand, provide an estimate to the correct solution. The idea is simple: guess on a solution, then improve it.
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics{illustrations/mesh.pdf}
-  \caption{An illustration of a general two-dimensional mesh.}
-  \label{fig:mesh}
-\end{figure}
+\paragraph*{Gauss-seidel} is an example. Divide the matrix into lower triangular, diagonal and upper triangular parts, reorganize and iterate:
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[]{illustrations/stencils.pdf}
-  \caption{Illustration of the standard 5-point stencil.}
-  \label{fig:stencil}
-\end{figure}
+\begin{align}
+  \mathbf{A} \mathbf{x} &= \mathbf{b} \\
+  \mathbf{A} &= \mathbf{L} + \mathbf{D} + \mathbf{U} \\
+  (\mathbf{L} + \mathbf{D} + \mathbf{U}) \mathbf{x} &= \mathbf{b} \\
+  \mathbf{D} \mathbf{x} &= \mathbf{b} - (\mathbf{L} + \mathbf{U}) \mathbf{x} \\
+  \mathbf{D} \mathbf{x}^{k+1} &= \mathbf{b} - (\mathbf{L} + \mathbf{U}) \mathbf{x}^{k} \\
+\end{align}
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics{illustrations/equation_numbering.pdf}
-  \caption{The numbering scheme used.}
-  \label{fig:numbering_scheme}
-\end{figure}
+\subsection{Utilizing the problem properties}
+The solvers described above are \emph{general} equation system solvers. They work on any equation system. We will now consider what the specific poisson problem can give us.
 
+Because we are using the 5 point stencil, we can write the equation system as a matrix equation system -- an equation in each row instead of each column:
+
+We define the matrices $\mathbf{U}$ and $\mathbf{T}$ as
+
+\begin{equation}
+  \mathbf{{U}} = 
+  \begin{bmatrix}
+    u_{1,1} & \ldots & \ldots & u_{1,n-1} \\
+    \vdots & & & \vdots \\
+    \vdots & & & \vdots \\
+    u_{n-1,1} & \ldots & \ldots & u_{n-1,n-1}
+  \end{bmatrix}
+\end{equation}
+\begin{equation}
+  \mathbf{{T}} = 
+  \begin{bmatrix}
+    2 & -1 & & & 0 \\
+    -1 & 2 & -1 & & \\
+    & & \ddots & & \\
+    & & -1 & 2 & -1 \\
+    0 & & & -1 & 2
+  \end{bmatrix}.
+\end{equation}
+
+Premultiplying $\mathbf{U}$ with $\mathbf{T}$ gives
+
+\begin{alignat*}{2}
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= 2u_{i,j} - u_{i+1,j}, &\qquad &i=1, \\
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j} - u_{i+1,j}, &\qquad 2 \leq &i \leq n-2, \\
+  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j}, &\qquad &i=n-1.
+\end{alignat*}
+
+Analogously, postmultiplying with $\mathbf{T}$ gives
+
+\begin{alignat*}{2}
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= 2u_{i,j} - u_{i,j+1}, &\qquad &i=1, \\
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j} - u_{i,j+1}, &\qquad 2 \leq &i \leq n-2, \\
+  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j}, &\qquad &i=n-1.
+\end{alignat*}
+
+If we can diagonalize $\mathbf{T}$ in this expression, the solution will be simple. We want to do a coordinate transformation to a system where this is the case. This implies getting the eigenvalues and eigenvectors of $\mathbf{T}$.
+
+Considering the solutions to 
+
+\begin{equation}
+  -u_{xx} = \lambda u \;\;\; \mathrm{on} \; (0, 1) \times (0, 1), u(0) = u(1) = 1
+\end{equation}
+
+Gives
+
+\begin{equation}
+  u_j(x) = \sin(j \pi x)
+\end{equation}
+
+Insert eigenvectors sampled at grid points of u into the equation
+
+\begin{equation}
+  \mathbf{T} \tilde{\mathbf{q}}_j = \lambda_j \tilde{\mathbf{q}}_j
+\end{equation}
+
+We can find that
+
+\begin{equation}
+  (\mathbf{{T}} \mathbf{\widetilde{q}}_j)_i = {{2 \biggl(1-\cos \biggl( \frac{j \pi}{n} \biggr) \biggr) }} {(\mathbf{\widetilde{q}}_j)_i}{{\sin \biggl( \frac{ij \pi}{n}\biggr)}}
+\end{equation}
+
+gives us the eigenvalues of $\mathbf{T}$. The boundary conditions correspond to sine functions, and we can use the discrete sine transform to find these eigenvalues. Runtime for solving a diagonal system is $\mathcal{O}(n^2) = \mathcal{O}(N)$. DST, however, requires $\mathcal{O}(n^2 \log n)$, which is the total asymptotic run time.
 
 % section discretizing_the_poisson_problem (end)
