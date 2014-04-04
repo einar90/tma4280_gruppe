@@ -1,18 +1,18 @@
 % -*- root: ../ex6.tex -*-
-\section{Appendix A, Kongull} % (fold)
+\section{Kongull} % (fold)
 \label{sec:appendix_kongull}
 Kongull is a supercomputer located at NTNU. The Kongull cluster is a CentOS 5.3 Linux cluster running Rocks on HP servers with AMD processors. The cluster consists of 98x 12-way nodes, with 1 login, 4 I/O and 93 compute nodes.
 
 \subsection{Compute-nodes} % (fold)
 \label{sub:compute_nodes}
-Kongull has 93 compute nodes where 44 nodes have 48 GiB of memory and the other 49 nodes have 24 GiB of memory. Each compute node is equipped with 2x 6-core 2.4Ghz AMD Opteron 2431 (Istanbul) processors with 6x512KiB L1 cache and a common 6MiB L3-cache. 
+Kongull has 93 compute nodes where 44 nodes have 48 GiB of memory and the other 49 nodes have 24 GiB of memory. Each compute node is equipped with 2x 6-core 2.4Ghz AMD Opteron 2431 (Istanbul) processors with 6x512KiB L1 cache and a common 6MiB L3-cache.
 % subsection compute_nodes (end)
 
 \subsection{Network} % (fold)
 \label{sub:network}
-Kongull's network layout is a \emph{Fat Tree}. The login- and I/O-node(s) are connected to a central switch, HP ProCurve 6600-24XG, with 10GbE SPF+ connectors. 
+Kongull's network layout is a \emph{Fat Tree}. The login- and I/O-node(s) are connected to a central switch, HP ProCurve 6600-24XG, with 10GbE SPF+ connectors.
 
-Each compute node is connected to a rack switch with 1Gb Ethernet network connection to the outside world, via two SR tranceivers on the central switch. 
+Each compute node is connected to a rack switch with 1Gb Ethernet network connection to the outside world, via two SR tranceivers on the central switch.
 % subsection network (end)
 % section appendix_a (end)
 
