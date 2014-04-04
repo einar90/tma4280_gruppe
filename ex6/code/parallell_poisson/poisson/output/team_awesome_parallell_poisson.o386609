@@ -1,0 +1,14 @@
+Warning: Permanently added 'compute-1-9' (RSA) to the list of known hosts.
+aquired MPI threading level: MPI_THREAD_SINGLE
+Running with one prosess, openMP active
+omp 36
+mpi 1
+n 16384
+runtime 112.515614
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 18
+mpi 2
+n 16384
+runtime 134.508309
+error 1.876114e-09
