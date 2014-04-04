@@ -236,7 +236,6 @@ void DiagonalizationPoisson2DfstSerial(Matrix b, const Vector lambda)
   Matrix ut = cloneMatrix(b);
   Vector buf;
   int NN=4*N;
-  double time;
 
 #pragma omp parallel for schedule(static) private(buf)
   for (i=0;i<b->cols;++i)
@@ -256,7 +255,6 @@ void DiagonalizationPoisson2DfstSerial(Matrix b, const Vector lambda)
     freeVector(buf);
   }
 
-  time = WallTime();
   for (j=0;j<b->cols;++j){
     for (i=0;i<b->rows;++i){
       ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
