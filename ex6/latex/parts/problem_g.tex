@@ -1,7 +1,7 @@
 % -*- root: ../ex6.tex -*-
 
-\subsection{Solving on larger domains}
-This far, we have found solutions for the unit square $(0, 1) \times (0,1)$. We will now consider a general rectangular surface $(0, L_x) \times (0,L_y)$. This gives new finite differences. Given division into $n+1$ subintervals in both directions, we have
+\subsection{Solving the poisson equation on $(0, L_x) \times (0,L_y)$}
+This far, we have found solutions for the unit square $(0, 1) \times (0,1)$. We will now consider a general rectangular surface $(0, L_x) \times (0,L_y)$. This gives new finite differences. Given division into $n$ subintervals in both directions, we have
 % Introduce the dimensionless variables $\hat{x}$ and $\hat{y}$:
 
 % \begin{align}
@@ -29,44 +29,6 @@ This far, we have found solutions for the unit square $(0, 1) \times (0,1)$. We 
 h_x &= \frac{L_x}{n} \\
 h_y &= \frac{L_y}{n}
 \end{align}
-
-We use the sine solution strategy as described by the lecture notes. We define the matrices $\mathbf{U}$ and $\mathbf{T}$ as
-
-\begin{equation}
-  \mathbf{{U}} = 
-  \begin{bmatrix}
-    u_{1,1} & \ldots & \ldots & u_{1,n-1} \\
-    \vdots & & & \vdots \\
-    \vdots & & & \vdots \\
-    u_{n-1,1} & \ldots & \ldots & u_{n-1,n-1}
-  \end{bmatrix}
-\end{equation}
-\begin{equation}
-  \mathbf{{T}} = 
-  \begin{bmatrix}
-    2 & -1 & & & 0 \\
-    -1 & 2 & -1 & & \\
-    & & \ddots & & \\
-    & & -1 & 2 & -1 \\
-    0 & & & -1 & 2
-  \end{bmatrix}.
-\end{equation}
-
-Premultiplying $\mathbf{U}$ with $\mathbf{T}$ gives
-
-\begin{alignat*}{2}
-  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= 2u_{i,j} - u_{i+1,j}, &\qquad &i=1, \\
-  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j} - u_{i+1,j}, &\qquad 2 \leq &i \leq n-2, \\
-  (\mathbf{{T}} \, \mathbf{{U}})_{ij} &= -u_{i-1,j}+2u_{i,j}, &\qquad &i=n-1.
-\end{alignat*}
-
-Analogously, postmultiplying with $\mathbf{T}$ gives
-
-\begin{alignat*}{2}
-  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= 2u_{i,j} - u_{i,j+1}, &\qquad &i=1, \\
-  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j} - u_{i,j+1}, &\qquad 2 \leq &i \leq n-2, \\
-  (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= -u_{i,j-1}+2u_{i,j}, &\qquad &i=n-1.
-\end{alignat*}
 
 We observe that, when using the five point stencil, 
 
