@@ -3,15 +3,16 @@
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
         title={Parallell efficiency and speedup},
-        xlabel={$P$},
+        xlabel={$P\times T$},
         ylabel={$\eta = S_p / P$},
         xmin=0,
         ylabel near ticks,
         axis y line*=right,
-        legend entries={Parallell efficiency ($\eta_p$), Speedup ($S_p$)}
+        legend entries={Parallell efficiency ($\eta_p$), Speedup ($S_p$), Perfect speedup ($\tau_1 \times (P\times T) / \tau_1$)}
         ]
         \addlegendimage{color=blue, mark=x};
         \addlegendimage{color=red, mark=x};
+        \addlegendimage{color=brown};
           \addplot[color=blue, mark=x]
               table[
                       col sep=tab,
@@ -26,14 +27,18 @@
         xmin=0,
         hide x axis,
         axis y line*=left,
+        ymin=1,
+        ymax=16,
         ]
-          \addplot[color=red,mark=x]
-              table[
-                      col sep=tab,
-                      x=p,
-                      y expr={794.640097/\thisrowno{3}},
-                   ]
-              {output_clean/const_n_16384_mod};
+        \addplot [color=brown, domain=1:288] {794.640097/(794.640097/x))};
+        \addplot[color=red,mark=x]
+            table[
+                    col sep=tab,
+                    x=p,
+                    y expr={794.640097/\thisrowno{3}},
+                 ]
+            {output_clean/const_n_16384_mod};
+
       \end{axis}
 \end{tikzpicture}
 
