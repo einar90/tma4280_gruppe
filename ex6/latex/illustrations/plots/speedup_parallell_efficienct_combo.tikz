@@ -1,4 +1,5 @@
 % -*- root: ../../ex6.tex -*-
+\pgfplotsset{legend style={legend columns=2}}
 
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
@@ -8,10 +9,16 @@
         xmin=0,
         ylabel near ticks,
         axis y line*=right,
-        legend entries={Parallell efficiency ($\eta_p$), Speedup ($S_p$), Perfect speedup ($\tau_1 \times (p\times t) / \tau_1$)}
+        legend entries={{$\eta_p, N=16384$},
+                        {$\eta_p, N=8192$},
+                        {$S_p, N=16384$},
+                        {$S_p, N=8192$},
+                        Perfect speedup ($\tau_1 \times (p\times t) / \tau_1$)}
         ]
         \addlegendimage{color=blue, mark=x};
+        \addlegendimage{color=blue, mark=x, densely dashed};
         \addlegendimage{color=red, mark=x};
+        \addlegendimage{color=red, mark=x, densely dashed};
         \addlegendimage{color=brown};
           \addplot[color=blue, mark=x]
               table[
@@ -20,6 +27,13 @@
                       y expr={794.640097/\thisrowno{3} / \thisrowno{0}},
                    ]
               {output_clean/const_n_16384_mod};
+          \addplot[color=blue, densely dashed, mark=x]
+              table[
+                      col sep=tab,
+                      x=p,
+                      y expr={185.4396855/\thisrowno{3} / \thisrowno{0}},
+                   ]
+              {output_clean/const_n_8192_1_mod};
       \end{axis}
       \begin{axis}[
         xlabel={$p$},
@@ -38,7 +52,13 @@
                     y expr={794.640097/\thisrowno{3}},
                  ]
             {output_clean/const_n_16384_mod};
-
+        \addplot[color=red,mark=x, densely dashed]
+            table[
+                    col sep=tab,
+                    x=p,
+                    y expr={185.4396855/\thisrowno{3}},
+                 ]
+            {output_clean/const_n_8192_1_mod};
       \end{axis}
 \end{tikzpicture}
 
