@@ -1,6 +1,8 @@
 % -*- root: ../ex6.tex -*-
 
-\section{Discretizing the Poisson problem} % (fold)
+\section{Theory} % (fold)
+
+\subsection{Discretizing the Poisson problem}
 \label{sec:discretizing_the_poisson_problem}
 Considering the solution of the two-dimensional Poisson problem:
 \begin{align}
@@ -20,14 +22,37 @@ Discretizing equation \eqref{eq:poisson2d_expanded} using a mesh like the one il
   -u_{i-1,j} -u_{i,j-1} + 4u_{i,j} - u_{i+1,j} - u_{i,j+1} = h^2 \cdot f_{i,j}
 \end{equation}
 This equation, combined with a numbering scheme like the one illustrated in Figure~\ref{fig:numbering_scheme} gives us a penta-diagonal matrix equation $\mathbf{Au}=h^2\mathbf{f}$ :
+% \begin{equation}
+%   \begin{bmatrix}
+%     4      & -1 & 0      & \cdots & -1     & 0      & \cdots & 0      & 0      & 0 \\
+%     -1     & 4  & -1     & 0      & \cdots & -1     & 0      & \cdots & 0      & 0 \\
+%     0      & -1 & 4      & -1     & 0      & \cdots & -1     & 0      & \cdots & 0 \\
+%     \vdots & \ddots & -1     & 4      & -1     & -1     & \cdots & 0      & 0      & 0 \\
+%            &   & 0       & \ddots & \ddots & 0      &        &        & -1     &   \\
+%     0      &   & \cdots  &  0     & 0      &  0     &  -1    & -1     & 4      &
+%   \end{bmatrix}
+%   \times
+%   \begin{bmatrix}
+%     u_0 \\ u_1 \\ u_2 \\ \vdots \\ u_{n-1} \\ u_n
+%   \end{bmatrix}
+%   =
+%   h^2 \cdot
+%   \begin{bmatrix}
+%     f_0 \\ f_1 \\ f_2 \\ \vdots \\ f_{n-1} \\ f_n
+%   \end{bmatrix}
+% \end{equation}
+
 \begin{equation}
   \begin{bmatrix}
-    4      & -1 & 0      & \cdots & -1     & 0      & \cdots & 0      & 0      & 0 \\
-    -1     & 4  & -1     & 0      & \cdots & -1     & 0      & \cdots & 0      & 0 \\
-    0      & -1 & 4      & -1     & 0      & \cdots & -1     & 0      & \cdots & 0 \\
-    \vdots & -1 & -1     & 4      & -1     & -1     & \cdots & 0      & 0      & 0 \\
-    -1     & 0  & \ddots & \ddots & \ddots & 0      &        &        & -1     &   \\
-    0      & 0  & \cdots &  0     & 0      &  0     &  -1    & -1     & 4      &
+    4 & -1      & & & & & & & 0 \\
+    -1 & 4 & \ddots &      & & & & & \vdots \\
+    0 & \ddots      & 4 & & & & & & 0 \\
+    \vdots & \ddots & & 4 & & & & & -1 \\
+    0 & \ddots      & & & 4 & & & & 0 \\
+    -1 & \ddots     & & & & 4 & & & \vdots \\
+    0 & \ddots      & & & & & 4 & & \\
+    \vdots & \ddots & & & & & & 4 & -1 \\
+    0 & \ddots      & & & & & & & 4 \\
   \end{bmatrix}
   \times
   \begin{bmatrix}
@@ -39,8 +64,31 @@ This equation, combined with a numbering scheme like the one illustrated in Figu
     f_0 \\ f_1 \\ f_2 \\ \vdots \\ f_{n-1} \\ f_n
   \end{bmatrix}
 \end{equation}
-{\Huge \textbf{Se poisson-fdm.pdf for korrekt matrise!!!}}
 
+... which may be solved in a number of ways.
+
+\subsection{Equation solvers}
+We will look at \emph{direct} and \emph{indirect} solvers for linear systems. A direct solver finds an exact solution in finite time, whereas an indirect solver \emph{iterates} on a solution until the error is acceptable.
+
+\subsubsection{Direct solvers}
+\paragraph*{Gauss-Jacobi} is a simple, direct method for any linear system $\mathbf{A}\mathbf{x} = \mathbf{b}$ which uses row reduction. It is often used in hand calculations. It is prone to roundoff errors, and there is no way to reuse the computations for different $\mathbf{b}$s. 
+
+\paragraph*{LU-factorization} is better suited for computational use than Gauss-Jacobi. The first step is to factorize the matrix into a lower triangular part $\mathbf{L}$ and an upper triangular part $\mathbf{U}$:
+
+\begin{equation}
+  \mathbf{A} = \mathbf{L} \mathbf{U}.
+\end{equation}
+
+We can then solve the system using the substitution $\mathbf{z} = \mathbf{U} \mathbf{x}$
+
+\begin{align}
+  \mathbf{A} \mathbf{x} = \mathbf{L} &\mathbf{U} \mathbf{x} = \mathbf{b} \\
+  \mathbf{L} &\mathbf{z} = \mathbf{b}.
+\end{align}
+
+We then find $\mathbf{z} = \mathbf{L}^{-1} \mathbf{b}$, then $\mathbf{x} = \mathbf{U}^{-1} \mathbf{z}$. These are cheap operations compared to $\mathbf{A} = \mathbf{L} \mathbf{U}$, which may be reused.
+
+\subsubsection{Indirect solvers}
 
 \begin{figure}[htbp]
   \centering

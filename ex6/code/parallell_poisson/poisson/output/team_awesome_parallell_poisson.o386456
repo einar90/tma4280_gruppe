@@ -1,0 +1,21 @@
+Warning: Permanently added 'compute-0-14' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute-0-6' (RSA) to the list of known hosts.
+Warning: Permanently added 'compute-0-8' (RSA) to the list of known hosts.
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 1
+mpi 36
+n 16384
+runtime 136.474492
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 2
+mpi 18
+n 16384
+runtime 141.108449
+error 1.876114e-09
+aquired MPI threading level: MPI_THREAD_SINGLE
+omp 4
+mpi 9
+n 16384
+runtime 147.304511
+error 1.876114e-09
