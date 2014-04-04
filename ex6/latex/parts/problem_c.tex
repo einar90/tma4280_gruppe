@@ -4,23 +4,23 @@
 
 \subsection{Overview} % (fold)
 \label{sub:overview}
-Here is a simplified overview of our solvers expected asymptotic runtimes in the different parts of it, and a simplified model for looking at network latency is presented.
+What follows is a simplified overview of of the expected asymptotic run times for the different parts of our solver; as well as a simplified analysis of the network latency introduced by the \texttt{MPI\_Send/Recv} calls in the program.
 
 \subsubsection{Asymptotic runtimes} % (fold)
 \label{ssub:asymptotic_runtimes}
 
 \begin{itemize}
 
-  \item \texttt{transpose(a,b)} has an asymptotic runtime of $O(N^2)$. Each element in the matrix \textbf{B} has to be copied into a new matrix \textbf{A}. This is done on the root prosess every time.
+  \item \texttt{transpose(a,b)} has an asymptotic runtime of $O(N^2)$. Each element in the matrix \textbf{B} has to be copied into a new matrix \textbf{A}. This is always performed by the root prosess.
 
-  \item Both \texttt{fst} and \texttt{fstinv} have an asymptotic runtime of $O(N\log(n))$. As each processors has a part of the whole matrix \textbf{B} this is going to take at most $O(partlens * N\log(n))$ every time these methods are used for every prosess except the root prosess.
+  \item Both \texttt{fst} and \texttt{fstinv} have an asymptotic runtime of $O(N^2 \log(N))$. As each process has a part of the whole matrix \textbf{B} this is going to take at most $O(N_p * N\log(N))$ (where $N_p$ is the number of columns being transformed by the process) every time these transformations are performed by every process except the root process.
 
-  \item Finding $\tilde{x}$ by using eigenvalues is done in $O(N^2)$. This is done in the root prosess every time.
+  \item Finding $\tilde{x}$ by applying the eigenvalues $\lambda$ is done in $O(N^2)$. This is always performed by the root process.
 
 \end{itemize}
 
 % For a full run..
-When we use the solver to run on a given dataset it does 2x \texttt{fst}, 2x \texttt{fstinv}, 2x \texttt{transpose} and solves $\tilde{x}$ once. If we run the solver with a small amount of prosesses the we would expect to see a bottleneck in the \texttt{fst} and \texttt{fstinv} functions. If we have a decent amount of prosesses and a sufficiently large $N$, we would expect to see most time used in the transpose of the matrix and calculations of $+tilde{x}$ as there is one prosess doing all the work here.
+When we apply the solver to a given dataset it performs $2\times \mathtt{fst}$, $2\times \mathtt{fstinv}$, $2\times \mathtt{transpose}$ and calculates $\tilde{x}$ once. If we run the solver with a small number of prosesses the we would expect to see a bottleneck in the \texttt{fst} and \texttt{fstinv} functions. If we have a reasonably large number of processes and a sufficiently large $n$, we would expect that the program would spend the largest amount of time computing the transpose of the matrix and $\tilde{x}$, as one process is performing \emph{all} the operations.
 % subsubsection asymptotic_runtimes (end)
 
 
@@ -28,14 +28,12 @@ When we use the solver to run on a given dataset it does 2x \texttt{fst}, 2x \te
 \label{ssub:network_latency}
 
 Here we choose to use a simple linear network model where the time to send $b$ bytes is modelled as:
-\begin{center}
-  \begin{equation}
-    T^{comm}(b) = \kappa + \gamma N^2
-  \end{equation}
-  where $\kappa$ is the network latency and $\gamma$ is the inverse network bandwith.
-\end{center}
+\begin{equation}
+  T^{comm}(b) = \kappa + \gamma N^2
+\end{equation}
+where $\kappa$ is the network latency and $\gamma$ is the inverse network bandwith.
 
-In our solver the root prosess has to send $N^2$ bytes and recieve $N^2$ bytes between every transpose operation. The whole matrix has to be distributed across the network no matter how we set up the problem, but this could be done more efficiently by making sure every prosess is responsible for distributing $N^2/P$ bytes each.
+In our solver the root prosess has to send $N^2$ bytes and recieve $N^2$ bytes for every transform operation. The whole matrix has to be distributed across the network no matter how we set up the problem, but this could be done more efficiently by making sure every prosess is responsible for distributing $N^2/P$ bytes each.
 
 % subsubsection network_latency (end)
 
@@ -46,7 +44,7 @@ In our solver the root prosess has to send $N^2$ bytes and recieve $N^2$ bytes b
 \subsection{Measured run time in relation to the problem size $n$} % (fold)
 \label{sub:run_time_in_relation_to_the_problem_size_n_}
 
-A plot of the runtime for a constant number of processes $t\times p = 36$ and varying problem sizes $n$ is shown in in Figure~\ref{fig:runtime_const_pt}. We see that the run time of our program fits well with the predicted run time $O(n^2 \ln(n))$.
+A plot of the runtime for a constant number of processes $t\times p = 36$ and varying problem sizes $n$ is shown in in Figure~\ref{fig:runtime_const_pt}. We see that the run time of our program fits well with the curve for the predicted run time $O(n^2 \ln(n))$.
 
 \begin{figure}[htbp]
   \centering
@@ -59,13 +57,14 @@ A plot of the runtime for a constant number of processes $t\times p = 36$ and va
 
 \subsection{Comparison of measured MPI and OpenMP performance} % (fold)
 \label{sub:comparison_of_mpi_and_openmp_performance}
-In this section we compare the run times for $n=16,384$ and various combinations of the number of MPI processes $p$ and OpenMP threads pr. process $t$, where $p\times t = 36$. The results are shown in Table~\ref{tab:runtimes_36}. In our case, we achieve the best performance for large $t$ and low $p$: the run time with $t=36, p=1$ is 16.3\% lower than the second best run time, with $t=18, p=2$. In the mid range we find the run times for high numbers of $p$ and low numbers of $t$. We get the highest run times for close numbers of $t$ and $p$.
+In this section we compare the run times for $n=16,384$ and various combinations of the number of MPI processes $p$ and OpenMP threads pr. process $t$, where $p\times t = 36$. The results are shown in Table~\ref{tab:runtimes_36}.
+
+In our case, we achieve the best performance for large $t$ and low $p$: the run time with $t=36, p=1$ is 16.3\% lower than the second best run time, with $t=18, p=2$. In the mid range we find the run times for high numbers of $p$ and low numbers of $t$. We get the highest run times for close numbers of $t$ and $p$.
 
 The significantly lower run time for $p=1$ is likely due to the absence of \texttt{MPI\_Send/Recv} calls, which introduces a significant latency in the program.
+The low run time for $p=2$ is likely due to processes staying on one node, thus reducing the send/receive latency.
 
-The relatively good run time for $p=36$ is explained by the fact that one node is ``reserved'' for transposing and distributing the matrix, while the 35 others are responsible for transformations. This means 35 transformations can run in parallel in this case, while in the cases with $p=18,12,9,6$ only $(p-1)\times t = 34, 33, 32$ and $30$ threads, respectively, run in parallel.
-
-Note that the run time for $p=1,2$ was acquired from runs on one Kongull node, while the others were acquired from runs on three nodes. This is likely the explanation for the low run time for $p=2, t=1$, but it should not affect the case with $p=1,t=36$ as the processes should not ``spread'' to the other nodes when MPI is not active.
+The relatively good run time for $p=36$ is explained by the fact that only one process is ``reserved'' for transposing and distributing the matrix, while the 35 others are responsible for transformations. This means 35 transformations can run in parallel on different processors, while in the cases with $p=18,12,9,6$ only $(p-1)\times t = 34, 33, 32$ and $30$ threads, respectively, run in parallel.
 
 In conclusion: out program does not utilize the hybrid model very well at all.
 

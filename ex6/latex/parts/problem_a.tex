@@ -9,9 +9,9 @@ The program written for this exercise was written in \emph{C}. It is based on th
   \item [Diagonalization:] All processes call the \texttt{DiagonalizationPoisson2Dfst}.
   \begin{enumerate}
     \item Process 0 distributes the $b$ matrix evenly among the other processes.
-    \item After receiving their parts, each of the other MPI-process calls the \texttt{fst} function in an OpenMP parallellized for-loop. The buffer is freed before and after each call to \emph{fst}. The separate parts are then sent back to the root MPI process.
+    \item After receiving their parts, each of the other MPI-process calls the \texttt{fst} function in an OpenMP parallellized for-loop. The buffer is freed before and after each call to \texttt{fst}. The separate parts are then sent back to the root MPI process.
     \item After receiving the parts and reassembling the now transformed $b$ matrix, process 0 transposes the matrix before dividing and distributing it among the other processes again.
-    \item After receiving the parts, each of the other processes calls the \texttt{ifst} function in an OpenMP parallellized for loop. The buffer is freed before and after each call to \emph{fst}. The separate parts are then sent back to the root MPI process.
+    \item After receiving the parts, each of the other processes calls the \texttt{ifst} function in an OpenMP parallellized for loop. The buffer is freed before and after each call to \texttt{fst}. The separate parts are then sent back to the root MPI process.
     \item After receiving and reassembling the parts again, now in the $ut$ matrix, process 0 divides the elements in the matrix by the $\lambda$ values.
     \item The next steps are identical to steps 1-4. After this we have the solution.
   \end{enumerate}

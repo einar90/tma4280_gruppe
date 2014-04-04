@@ -9,17 +9,25 @@ In this section we discuss the speedup\footnote{A measure of how much the run ti
 \begin{equation}
   \eta_p = \frac{S_p}{P}
 \end{equation}
-where $\tau_p$ denotes the measured run time on $p$ processors. The results are shown in Figure~\ref{fig:plot_pe_sp} and Table~\ref{tab:speedup_all_data}. From the plot/table we see that our program achieves a maximum of 5.82 for $P\times T$ = 36, which is far less than the optimal speedup for 36 processors (which would be $S_p=36$).
+where $\tau_p$ denotes the measured run time on $p$ processors. The results are shown in Figure~\ref{fig:plot_pe_sp} and Table~\ref{tab:speedup_all_data}.
 
-We also see from the $\eta_p$ lines in Figure~\ref{fig:plot_pe_sp} that our program does not utilize parallell resources very well: it drops drastically with an increasing number of processors, and at our point optimal speedup $\eta_p=0.16$ which is not very good.
+From Table~\ref{tab:speedup_all_data} we see that we achieve the best speedup $S_p=7.06$ for $t=36, p=1$ (one process on one node with 36 OpenMP threads). This is due to the absence of latency from MPI calls. We also achieve a good speedup $S_p=5.91$ for $t=18, p=2$ (two processes on one node with 18 OpenMP threads each). The good numbers here is likely due to the significantly lower latency of transferring data locally within a node's memory vs. across the network between nodes. These results are, however, ignored in the plot in Figure~\ref{fig:plot_pe_sp}, because they do not scale with an increasing number of $t$: we \emph{must} introduce more MPI processes, and thus more latency, to scale up to a larger number of processors.
 
-When in comes to speedup in relation to the problem size $n$, we see that increasing the problem size from 8192 to 16384 does improve the speedup. This is due to the increased benefit of parallelizing the transform.
+If we, based on the reasoning in the previous paragraph, ignore the results for $p<3$,  we see that our program achieves a maximum of $S_p = 5.82$ for $t=1, p=36$. The reason for this  combination achieving the best speedup is the same as the reason for it having a low run time in the previous section: only one process is ``reserved'' for transposing and distributing the matrix, while the 35 others are free to perform the transformations in parallel. The reason for the other combinations where $P\times T = 36$ is also the same as in the previous section.
+
+The low $S_p$ for the cases where $t\times p < 36$ is due to the program not utilizing all the 36 processors that are available on three Kongull nodes.
+
+From the plot in Figure~\ref{fig:plot_pe_sp} we see that our speedup increases at a reasonable rate up until $p\times t \approx 18$ -- although considerably less than the optimal speedup. After that the curve flattens out, and we achieve a relatively modest increase speedup with increasing number of processors. This is likely due to the time it takes to transfer the data between the nodes, as well as the bottlenecks in the matrix transpose and $\lambda$ application.
+
+We also see that $\eta_p$ decreases with an increasing $t\times p$. This, again, is likely due to the previously mentioned bottlenecks. The higher numbers for $\eta_p$ for $p\times t < 36$ is caused by the larger performance gain from a larger number of processors performing the transform before the bottlenecks become dominating.
+
+When in comes to speedup in relation to the problem size $n$, we see in Figure~\ref{fig:plot_pe_sp} that increasing the problem size from 8192 to 16384 does improve the speedup. This is due to the increased benefit of parallelizing a larger transform.
 
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{illustrations/plots/speedup_parallell_efficienct_combo.pdf}
-  \caption{Combination plot of parallell efficiency and speedup. Only the best runtimes for equal $p\times t$ are plotted. The complete dataset is shown in Table~\ref{tab:speedup_all_data}.}
+  \caption{Combination plot of parallell efficiency and speedup. Only the best runtimes for equal $p\times t$ are plotted, and the values for $p<3$ are discarded because they do not include the network latency, which is important to have in mind when it comes to scalability. The complete dataset is shown in Table~\ref{tab:speedup_all_data}.}
   \label{fig:plot_pe_sp}
 \end{figure}
 
@@ -29,15 +37,19 @@ When in comes to speedup in relation to the problem size $n$, we see that increa
   \label{tab:speedup_all_data}
   \begin{tabularx}{0.9\textwidth}{XXXX|XX}
     \toprule
-    $P\times T$ & $t$ & $p$ & $\tau$ & $S_p$ & $\eta_p$ \\
+    $p\times t$ & $t$ & $p$ & $\tau$ & $S_p$ & $\eta_p$ \\
     \midrule
-    36   &  1   & 36    &  136.474492 & 5.82  & 0.16\\
-    36   &  2   & 18    &  141.108449 & 5.63  & 0.16\\
-    36   &  3   & 12    &  143.360202 & 5.54  & 0.15\\
-    36   &  4   & 9     &  147.304511 & 5.39  & 0.15\\
-    36   &  6   & 6     &  153.733214 & 5.17  & 0.14\\
-    24   &  4   & 6     &  154.214797 & 5.15  & 0.21\\
-    18   &  3   & 6     &  162.046432 & 4.90  & 0.27\\
+    36  & 36  & 1   & 112.515614  &  7.06  &  0.20  \\
+    36  & 18  & 2   & 134.508309  &  5.91  &  0.16  \\
+    36  & 1   & 36  & 136.474492  &  5.82  &  0.16  \\
+    36  & 2   & 18  & 141.108449  &  5.63  &  0.16  \\
+    36  & 3   & 12  & 143.360202  &  5.54  &  0.15  \\
+    36  & 4   & 9   & 147.304511  &  5.39  &  0.15  \\
+    36  & 6   & 6   & 153.733214  &  5.17  &  0.14  \\
+    24  & 4   & 6   & 154.214797  &  5.15  &  0.21  \\
+    18  & 3   & 6   & 162.046432  &  4.90  &  0.27  \\
+    18  & 3   & 6   & 162.046432  &  4.90  &  0.27  \\
+    1   & 1   & 1   & 794.640097  &  1.00  &  1.00  \\
     \bottomrule
   \end{tabularx}
 \end{table}

@@ -11,8 +11,8 @@
         axis y line*=right,
         legend entries={{$\eta_p, N=16384$},
                         {$\eta_p, N=8192$},
-                        {$S_p, N=16384$},
-                        {$S_p, N=8192$},
+                        {$S_p, n=16384$},
+                        {$S_p, n=8192$},
                         Perfect speedup ($p\times t$)}
         ]
         \addlegendimage{color=blue, mark=x};
@@ -24,7 +24,7 @@
               table[
                       col sep=tab,
                       x=p,
-                      y expr={794.640097/\thisrowno{3} / \thisrowno{0}},
+                      y=eta,
                    ]
               {output_clean/const_n_16384_mod};
           \addplot[color=blue, densely dashed, mark=x]
@@ -49,7 +49,7 @@
             table[
                     col sep=tab,
                     x=p,
-                    y expr={794.640097/\thisrowno{3}},
+                    y=sp,
                  ]
             {output_clean/const_n_16384_mod};
         \addplot[color=red,mark=x, densely dashed]

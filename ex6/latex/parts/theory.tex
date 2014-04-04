@@ -1,6 +1,6 @@
 % -*- root: ../ex6.tex -*-
 
-\section{Theory} % (fold)
+\section{Mathematical background} % (fold)
 
 \subsection{Discretizing the Poisson problem}
 \label{sec:discretizing_the_poisson_problem}
@@ -135,7 +135,7 @@ Because we are using the 5 point stencil, we can write the equation system as a 
 We define the matrices $\mathbf{U}$ and $\mathbf{T}$ as
 
 \begin{equation}
-  \mathbf{{U}} = 
+  \mathbf{{U}} =
   \begin{bmatrix}
     u_{1,1} & \ldots & \ldots & u_{1,n-1} \\
     \vdots & & & \vdots \\
@@ -144,7 +144,7 @@ We define the matrices $\mathbf{U}$ and $\mathbf{T}$ as
   \end{bmatrix}
 \end{equation}
 \begin{equation}
-  \mathbf{{T}} = 
+  \mathbf{{T}} =
   \begin{bmatrix}
     2 & -1 & & & 0 \\
     -1 & 2 & -1 & & \\
@@ -172,7 +172,7 @@ Analogously, postmultiplying with $\mathbf{T}$ gives
 
 If we can diagonalize $\mathbf{T}$ in this expression, the solution will be simple. We want to do a coordinate transformation to a system where this is the case. This implies getting the eigenvalues and eigenvectors of $\mathbf{T}$.
 
-Considering the solutions to 
+Considering the solutions to
 
 \begin{equation}
   -u_{xx} = \lambda u \;\;\; \mathrm{on} \; (0, 1) \times (0, 1), u(0) = u(1) = 1

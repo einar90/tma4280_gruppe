@@ -1,10 +1,12 @@
 % -*- root: ../ex6.tex -*-
+
+\clearpage
 \section{Hardware description and compilation} % (fold)
 \label{sec:hardware_and_compilation}
 
 \subsection{Hardware} % (fold)
 \label{sub:hardware}
-Our numerical calculations are done using the supercomputer \emph{Kongull} at NTNU. For very specific information about \emph{Kongull} see \ref{sec:appendix_kongull}.
+Our numerical calculations are done using the \emph{Kongull} cluster at NTNU. For additional technical information about \emph{Kongull} see appendix \ref{sec:appendix_kongull}.
 
 \subsubsection{Memory} % (fold)
 \label{ssub:memory}
@@ -26,17 +28,15 @@ Each compute node on \emph{Kongull} consists of 2x 6-core 2.4Ghz AMD Opteron 243
 
 \subsection{Compiling} % (fold)
 \label{sub:compiling}
-Our program was compiled on \emph{Kongull} by cloning the source files from our \emph{GitHub} repository onto our working directory on \emph{Kongull}. We used \texttt{cmake} to generate a makefile for us with the release build options, \texttt{CMAKE\_BUILD\_TYPE=RELEASE}, that turns on compiler flags for a release version.
+Our program was compiled on \emph{Kongull} by cloning the source files from our \emph{GitHub} repository onto our working directory on \emph{Kongull}. We used \texttt{cmake} to generate a makefile for us with the release build options, \texttt{CMAKE\_BUILD\_TYPE=RELEASE}, that turns on compiler flags for a release version with optimizations.
 
 \emph{Kongull} has support for \emph{cmake} through modules we can load in the terminal. We used version 2.8.7 of \emph{cmake} to generate our makefiles.
 
 \subsubsection{Compilers and libraries} % (fold)
 \label{ssub:compilers}
-We used the \emph{intel-compilers} version 11.1.059 on \emph{Kongull} to compile our executables.
+We used the \emph{intel-compilers} version 11.1.059 on \emph{Kongull} to compile our executables. We also loaded the for \emph{OpenMPI 1.4.3-intel} module.
 
-We also had to load the modules for \emph{OpenMPI 1.4.3-intel}.
-
-Libraries used in the solver are \texttt{poissoncommon} and \texttt{common} provided by the professor in the course \emph{TMA4280}, Arne Morten Kvarving. We utilise some OpenMP library calls through these libraries. There is also a \emph{fast sine transform} provided in \texttt{fst.f}.
+Libraries used in the solver are \texttt{poissoncommon} and \texttt{common} provided by the lecturer in the \emph{TMA4280} course, Arne Morten Kvarving. We utilise some MPI library calls through these libraries. There is also a \emph{(inverse) fast sine transform} provided in \texttt{fst.f}.
 
 % subsubsection compilers (end)
 

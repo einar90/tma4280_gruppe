@@ -1,17 +1,18 @@
 % -*- root: ../ex6.tex -*-
 
-\subsection{Verification of correctness} % (fold)
+\section{Verification of correctness} % (fold)
 \label{sub:verification_of_correctness}
 To be able to guarantee that our solver ran as expected we had to do a check that the error decreased at an expected rate. If we halved the steplength $h$ we would expect that our error would be reduced by a factor of 4. ($\mathcal{O}(h^2)$)
 
+As we can see from the plot in Figure~\ref{fig:error} there are no convergence issues with our solver. The small ``dip'' at the end is possibly caused by round-off errors.
+
 \begin{figure}[htbp]
-	\centering
-	\includegraphics[width=\textwidth]{illustrations/plots/error_vs_n.pdf}
-	\caption{Loglog plot of the residual error versus N.}
-	\label{fig:label}
+  \centering
+  \includegraphics[width=\textwidth]{illustrations/plots/error_vs_n.pdf}
+  \caption{Loglog plot of the residual error versus N.}
+  \label{fig:error}
 \end{figure}
 
-As we can see from the plot there are no convergence issues with our solver.
 
 
 % subsection verification_of_correctness (end)

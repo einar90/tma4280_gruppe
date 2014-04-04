@@ -30,18 +30,14 @@ h_x &= \frac{L_x}{n} \\
 h_y &= \frac{L_y}{n}
 \end{align}
 
-We observe that, when using the five point stencil, 
-
+We observe that, when using the five point stencil,
 \begin{align}
   \frac{1}{h_x^2} (\mathbf{{T}} \, \mathbf{{U}})_{ij} \approx -\left( \frac{\partial^2 u}{\partial x^2} \right)_{i,j}
 \end{align}
-
 \begin{align}
   \frac{1}{h_y^2} (\mathbf{{U}} \, \mathbf{{T}})_{ij} \approx -\left( \frac{\partial^2 u}{\partial y^2} \right)_{i,j}
 \end{align}
-
 \ldots wich differs from the expressions we have on the unit square. We may now use these approximations for discretization:
-
 \begin{equation}
 \begin{array}{ccl}
 	-\frac{\partial^2 }{\partial x^2} u &-\frac{\partial^2}{\partial y^2} u &= f \\
@@ -49,14 +45,12 @@ We observe that, when using the five point stencil,
 	(\mathbf{{T}} \, \mathbf{{U}})_{ij} &+\frac{h_x^2}{h_y^2} (\mathbf{{U}} \, \mathbf{{T}})_{ij} &= f_{i,j} h_x^2
 \end{array}
 \end{equation}
-
 Because we cannot extract a common factor $\frac{1}{h^2}$ out of the left expression, we cannot move $\frac{1}{h^2}$ to the right side of the equation, unless $h_x = h_y$. Let $\frac{h_x^2}{h_y^2} = \beta$:
-
 \begin{equation}
 (\mathbf{{T}} \, \mathbf{{U}})_{ij} +\beta (\mathbf{{U}} \, \mathbf{{T}})_{ij} = f_{i,j} h_x^2
 \end{equation}
 
-This equation may be solved as the unit square poisson 2D case, given the eigenvalues. We may use the sine transform, but need a different solution because we are no longer on the unit square. In the 2D case, we may use 
+This equation may be solved as the unit square poisson 2D case, given the eigenvalues. We may use the sine transform, but need a different solution because we are no longer on the unit square. In the 2D case, we may use
 
 \begin{align}
   \mathbf{u}_j^x(x) &= \sin(\frac{j \pi x}{L_x}) \\

@@ -21,32 +21,31 @@
 \thispagestyle{empty}
 \clearpage
 
+\input{parts/introduction.tex} \clearpage
+
 \tableofcontents
+\clearpage
+
 
 \input{parts/theory.tex}
 
-\section{Results}
-\input{parts/problem_a.tex} \clearpage
-\input{parts/problem_b.tex} \clearpage
-\input{parts/problem_c.tex} \clearpage
-\input{parts/problem_d.tex} \clearpage
+\input{parts/problem_a.tex}
+\input{parts/hardware_compiler.tex}
 
-\section{Discussion}
-\input{parts/problem_e.tex} \clearpage
-\input{parts/problem_f.tex} \clearpage
-\input{parts/problem_g.tex} \clearpage
+\input{parts/problem_b.tex}
+\input{parts/problem_c.tex}
+\input{parts/problem_d.tex}
+
+\input{parts/problem_e.tex}
+\input{parts/problem_f.tex}
+\input{parts/problem_g.tex}
 \input{parts/bottlenecks.tex}
-
-
-\clearpage
-\begin{thebibliography}{2}
-  \bibitem{kongull} {\em Notur article on Kongull}, 2013. \\ \texttt{http://docs.notur.no/Members/hrn/kongull.hpc.ntnu.no/kongull-hardware-1/hardware}
-\end{thebibliography}
 
 \clearpage
 \appendix
-\input{parts/hardware_compiler.tex}
 \input{parts/appendix_a_kongull}
+\clearpage
+\input{parts/appendix_diagonalization_code.tex}
 
 
 
