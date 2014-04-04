@@ -13,7 +13,7 @@
                         {$\eta_p, N=8192$},
                         {$S_p, N=16384$},
                         {$S_p, N=8192$},
-                        Perfect speedup ($\tau_1 \times (p\times t) / \tau_1$)}
+                        Perfect speedup ($p\times t$)}
         ]
         \addlegendimage{color=blue, mark=x};
         \addlegendimage{color=blue, mark=x, densely dashed};
