@@ -2,7 +2,7 @@
 
 \section{Implementation} % (fold)
 \label{sec:implementation}
-The program written for this exercise was written in \emph{C}. It is based on the \texttt{poisson2D} program given as an example in the course GitHub repository. An illustration of the parallellized program flow is given in Figure~\ref{fig:program_flow}. A more detailed description of the program flow follows:
+The program written for this exercise was written in \emph{C}. It is based on the \texttt{poisson2D} program given as an example in the course GitHub repository\footnote{\url{https://github.com/akva2/tma4280}}. An illustration of the parallellized program flow is given in Figure~\ref{fig:program_flow}. A more detailed description of the program flow follows:
 \begin{description}
   \item [MPI check:] The program checks if the set number of MPI processes is equal to 1 or if MPI is disabled. If it \emph{is} a separate version of the diagonalization function with no MPI calls is called (\texttt{DiagonalizationPoisson2DfstSerial}). If it is \emph{not}, the \texttt{DiagonalizationPoisson2Dfst} function -- utilizing both MPI and OpenMP -- is called.
   \item [Initialization:] The root process initializes various matrices; the other processes only initialize the $b$ matrix.

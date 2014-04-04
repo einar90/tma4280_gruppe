@@ -6,35 +6,35 @@
 
 \subsection{Hardware} % (fold)
 \label{sub:hardware}
-Our numerical calculations are done using the \emph{Kongull} cluster at NTNU. For additional technical information about \emph{Kongull} see appendix \ref{sec:appendix_kongull}.
+Our numerical calculations are done using the \emph{Kongull} cluster at NTNU. For additional technical information about Kongull see appendix \ref{sec:appendix_kongull}.
 
 \subsubsection{Memory} % (fold)
 \label{ssub:memory}
-\emph{Kongull} has 93 compute nodes where 44 nodes have 48 GiB of memory and the other 49 nodes have 24 GiB of memory. Our program will use approximately $16384 \times 16384 \times 8 bytes = 2148 MiB$ in our root node to hold our matrix, and an additional 2148 MiB to hold the transpose copy of it. No matter how many processors we add, the combined memory usage of them will not exceed 2x 2148 MiB for storing the parts of our original matrix. There are contributions from other places like the buffer, eigenvalues and grid but these are small in comparison.
+Kongull has 93 compute nodes where 44 nodes have 48 GiB of memory and the other 49 nodes have 24 GiB of memory. Our program will use approximately $16384 \times 16384 \times 8 bytes = 2148 MiB$ in our root node to hold our matrix, and an additional 2148 MiB to hold the transpose copy of it. No matter how many processors we add, the combined memory usage of them will not exceed 2x 2148 MiB for storing the parts of our original matrix. There are contributions from other places like the buffer, eigenvalues and grid but these are small in comparison.
 
 If we sum up all of these contributions we end up with approximately 8-9 GiB of memory. In other words, there should be no problem staying within the 24 GiB of memory provided by 49 of the compute nodes.
 % subsubsection memory (end)
 
 \subsubsection{Computational power} % (fold)
 \label{ssub:subsubsection_name}
-Each compute node on \emph{Kongull} consists of 2x 6-core 2.4Ghz AMD Opteron 2431 (Istanbul) processors with 6x512KiB L1 cache and a common 6MiB L3-cache.
+Each compute node on Kongull consists of 2x 6-core 2.4Ghz AMD Opteron 2431 (Istanbul) processors with 6x512KiB L1 cache and a common 6MiB L3-cache.
 % subsubsection subsubsection_name (end)
 
 \subsubsection{Network} % (fold)
 \label{ssub:network}
-\emph{Kongull's} network layout is a \emph{Fat Tree}. Each compute node is connected to a rack switch with 1Gb Ethernet network connection to the outside world, via two SR tranceivers on the central switch. We expect the network to one of the bottlenecks in our solver.
+Kongull's network layout is a \emph{Fat Tree}. Each compute node is connected to a rack switch with 1Gb Ethernet network connection to the outside world, via two SR tranceivers on the central switch. We expect the network to one of the bottlenecks in our solver.
 % subsubsection network (end)
 % subsection hardware (end)
 
 \subsection{Compiling} % (fold)
 \label{sub:compiling}
-Our program was compiled on \emph{Kongull} by cloning the source files from our \emph{GitHub} repository onto our working directory on \emph{Kongull}. We used \texttt{cmake} to generate a makefile for us with the release build options, \texttt{CMAKE\_BUILD\_TYPE=RELEASE}, that turns on compiler flags for a release version with optimizations.
+Our program was compiled on Kongull by cloning the source files from our GitHub repository onto our working directory on Kongull. We used \texttt{cmake} to generate a makefile for us with the release build options, \texttt{CMAKE\_BUILD\_TYPE=RELEASE}, that turns on compiler flags for a release version with optimizations.
 
-\emph{Kongull} has support for \emph{cmake} through modules we can load in the terminal. We used version 2.8.7 of \emph{cmake} to generate our makefiles.
+Kongull has support for \emph{cmake} through modules we can load in the terminal. We used version 2.8.7 of \emph{cmake} to generate our makefiles.
 
 \subsubsection{Compilers and libraries} % (fold)
 \label{ssub:compilers}
-We used the \emph{intel-compilers} version 11.1.059 on \emph{Kongull} to compile our executables. We also loaded the for \emph{OpenMPI 1.4.3-intel} module.
+We used the \emph{intel-compilers} version 11.1.059 on Kongull to compile our executables. We also loaded the for \emph{OpenMPI 1.4.3-intel} module.
 
 Libraries used in the solver are \texttt{poissoncommon} and \texttt{common} provided by the lecturer in the \emph{TMA4280} course, Arne Morten Kvarving. We utilise some MPI library calls through these libraries. There is also a \emph{(inverse) fast sine transform} provided in \texttt{fst.f}.
 

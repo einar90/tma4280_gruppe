@@ -44,15 +44,16 @@ In our solver the root prosess has to send $N^2$ bytes and recieve $N^2$ bytes f
 \subsection{Measured run time in relation to the problem size $n$} % (fold)
 \label{sub:run_time_in_relation_to_the_problem_size_n_}
 
-A plot of the runtime for a constant number of processes $t\times p = 36$ and varying problem sizes $n$ is shown in in Figure~\ref{fig:runtime_const_pt}. We see that the run time of our program fits well with the curve for the predicted run time $O(n^2 \ln(n))$.
+A plot of the runtime for a constant number of processes $t\times p = 36$ and varying problem sizes $n$ is shown in in Figure~\ref{fig:runtime_const_pt}. We see that the run time of our program fits well with the curve for the predicted run time $O(N^2 \ln(N))$.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{illustrations/plots/const_pt_runtime.pdf}
-  \caption{Plot of the runtime for a constant number of processes $n\times p = 36$ for varying problem sizes $n$. A plot of $n^2 \ln(n)$ is shown for reference to indicate the ``correct shape''.}
+  \caption{Plot of the runtime for a constant number of processes $t\times p = 36$ for varying problem sizes $n$. A plot of $N^2 \ln(N)$ is shown for reference to indicate the ``correct shape''.}
   \label{fig:runtime_const_pt}
 \end{figure}
 % subsection run_time_in_relation_to_the_problem_size_n_ (end)
+
 
 
 \subsection{Comparison of measured MPI and OpenMP performance} % (fold)
@@ -67,6 +68,8 @@ The low run time for $p=2$ is likely due to processes staying on one node, thus 
 The relatively good run time for $p=36$ is explained by the fact that only one process is ``reserved'' for transposing and distributing the matrix, while the 35 others are responsible for transformations. This means 35 transformations can run in parallel on different processors, while in the cases with $p=18,12,9,6$ only $(p-1)\times t = 34, 33, 32$ and $30$ threads, respectively, run in parallel.
 
 In conclusion: out program does not utilize the hybrid model very well at all.
+
+
 
 \begin{table}[H]
   \centering
