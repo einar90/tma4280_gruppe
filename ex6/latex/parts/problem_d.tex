@@ -1,49 +1,45 @@
 % -*- root: ../ex6.tex -*-
 
-\section{Speedup and parallell efficiency} % (fold)
-\label{sec:speedup_and_parallell_efficiency}
+\subsection{Speedup and parallell efficiency} % (fold)
+\label{sub:speedup_and_parallell_efficiency}
+In this section we discuss the speedup\footnote{A measure of how much the run time is reduced when the number of processors increases.} $S_p$  and parallel efficiency\footnote{A measure of how well the program utilizes parallel resources.} $\eta_p$ for our program, where
+\begin{equation}
+  S_p = \frac{\tau_1}{\tau_p}
+\end{equation}
+\begin{equation}
+  \eta_p = \frac{S_p}{P}
+\end{equation}
+where $\tau_p$ denotes the measured run time on $p$ processors. The results are shown in Figure~\ref{fig:plot_pe_sp} and Table~\ref{tab:speedup_all_data}. From the plot/table we see that our program achieves a maximum of 5.82 for $P\times T$ = 36, which is far less than the optimal speedup for 36 processors (which would be $S_p=36$).
+
+We also see from the $\eta_p$ lines in Figure~\ref{fig:plot_pe_sp} that our program does not utilize parallell resources very well: it drops drastically with an increasing number of processors, and at our point optimal speedup $\eta_p=0.16$ which is not very good.
+
+When in comes to speedup in relation to the problem size $n$, we see that increasing the problem size from 8192 to 16384 does improve the speedup. This is due to the increased benefit of parallelizing the transform.
 
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth]{illustrations/plots/speedup_parallell_efficienct_combo.pdf}
-  \caption{Combination plot of parallell efficiency and speedup. Only the best runtimes for equal $P\times T$ are plotted. The complete dataset is shown in Table~\ref{tab:speedup_all_data}.}
+  \caption{Combination plot of parallell efficiency and speedup. Only the best runtimes for equal $p\times t$ are plotted. The complete dataset is shown in Table~\ref{tab:speedup_all_data}.}
   \label{fig:plot_pe_sp}
 \end{figure}
 
 \begin{table}[H]
   \centering
-  \caption{All measured datapoints for $N=16,384$ and various numbers of $T$ and $P$.}
+  \caption{All measured datapoints for $N=16,384$ and various numbers of $t$ and $p$.}
   \label{tab:speedup_all_data}
-  \begin{tabularx}{0.8\textwidth}{XXXX|X}
+  \begin{tabularx}{0.9\textwidth}{XXXX|XX}
     \toprule
-    $P\times T$ & $T$ & $P$ & $\tau$ & $S_p$ \\
+    $P\times T$ & $t$ & $p$ & $\tau$ & $S_p$ & $\eta_p$ \\
     \midrule
-    36   &  1   & 36    &  136.474492 & 5.82 \\
-    36   &  2   & 18    &  141.108449 & 5.63 \\
-    36   &  3   & 12    &  143.360202 & 5.54 \\
-    48   &  4   & 12    &  145.301737 & 5.47 \\
-    54   &  3   & 18    &  146.009243 & 5.44 \\
-    72   &  4   & 18    &  146.502481 & 5.42 \\
-    72   &  6   & 12    &  147.167745 & 5.40 \\
-    36   &  4   & 9     &  147.304511 & 5.39 \\
-    96   &  8   & 12    &  148.029205 & 5.37 \\
-    144  &  12  & 12    &  149.740770 & 5.31 \\
-    144  &  8   & 18    &  150.962389 & 5.26 \\
-    108  &  6   & 18    &  151.793586 & 5.24 \\
-    216  &  12  & 18    &  153.234946 & 5.19 \\
-    48   &  8   & 6     &  153.630168 & 5.17 \\
-    36   &  6   & 6     &  153.733214 & 5.17 \\
-    24   &  4   & 6     &  154.214797 & 5.15 \\
-    72   &  3   & 24    &  154.638378 & 5.14 \\
-    72   &  12  & 6     &  157.268637 & 5.05 \\
-    288  &  12  & 24    &  157.365175 & 5.05 \\
-    144  &  6   & 24    &  158.592166 & 5.01 \\
-    96   &  4   & 24    &  158.667709 & 5.01 \\
-    18   &  3   & 6     &  162.046432 & 4.90 \\
-    192  &  8   & 24    &  164.257942 & 4.84 \\
+    36   &  1   & 36    &  136.474492 & 5.82  & 0.16\\
+    36   &  2   & 18    &  141.108449 & 5.63  & 0.16\\
+    36   &  3   & 12    &  143.360202 & 5.54  & 0.15\\
+    36   &  4   & 9     &  147.304511 & 5.39  & 0.15\\
+    36   &  6   & 6     &  153.733214 & 5.17  & 0.14\\
+    24   &  4   & 6     &  154.214797 & 5.15  & 0.21\\
+    18   &  3   & 6     &  162.046432 & 4.90  & 0.27\\
     \bottomrule
   \end{tabularx}
 \end{table}
 
-% section speedup_and_parallell_efficiency (end)
+% subsection speedup_and_parallell_efficiency (end)
