@@ -1,0 +1,126 @@
+% -*- root: ../ex6.tex -*-
+
+\section{DiagonalizationPoisson2Dfst} % (fold)
+\label{sec:DiagonalizationPoisson2Dfst}
+
+\begin{lstlisting}
+void DiagonalizationPoisson2Dfst(Matrix b, int size, int rank,
+                                 MPI_Status status, int *displacements,
+                                 int *partlens)
+{
+  int i,j,k,r,c;
+  int N=b->rows+1;
+  Vector lambda;
+  Matrix ut = cloneMatrix(b);
+  Vector buf;
+  int NN=4*N;
+  double time;
+
+  Matrix copyMatrix;
+
+  if(rank == 0) {
+    lambda = generateEigenValuesP1D(N-1);
+
+    distributeCols(partlens, displacements, N, b, copyMatrix, size, 100);
+  }
+
+  if(rank != 0) {
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+             0, 100, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+#pragma omp parallel for schedule(static) private(buf)
+    for (i=0;i<b->cols;++i){
+      buf = createVector(4*(b->rows+1));
+      fst(b->data[i], &N, buf->data, &NN);
+      freeVector(buf);
+    }
+
+    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 200, MPI_COMM_WORLD);
+  }
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, b, N, size, 200);
+    transposeMatrix(ut, b);
+
+    distributeCols(partlens, displacements, N, ut, copyMatrix, size, 300);
+  }
+
+  if (rank != 0)
+  {
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+             0, 300, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+#pragma omp parallel for schedule(static) private(buf)
+    for (i=0;i<b->cols;++i)
+    {
+      buf = createVector(4*(b->rows+1));
+      fstinv(b->data[i], &N, buf->data, &NN);
+      freeVector(buf);
+    }
+
+    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 400, MPI_COMM_WORLD);
+  }
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, ut, N, size, 400);
+    for (j=0;j<b->cols;++j){
+      for (i=0;i<b->rows;++i){
+        ut->data[j][i] /= (lambda->data[i]+lambda->data[j]+alpha);
+      }
+    }
+
+    distributeCols(partlens, displacements, N, ut, copyMatrix, size, 500);
+  }
+
+  if (rank != 0)
+  {
+    MPI_Recv(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE,
+             0, 500, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+#pragma omp parallel for schedule(static) private(buf)
+    for (i=0;i<b->cols;++i)
+    {
+      buf = createVector(4*(b->rows+1));
+      fst(ut->data[i], &N, buf->data, &NN);
+      freeVector(buf);
+    }
+
+    MPI_Send(&ut->as_vec->data[0], ut->as_vec->len, MPI_DOUBLE, 0, 600, MPI_COMM_WORLD);
+  }
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, ut, N, size, 600);
+
+    transposeMatrix(b, ut);
+
+    distributeCols(partlens, displacements, N, b, copyMatrix, size, 700);
+  }
+
+  if(rank != 0) {
+    MPI_Recv(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE,
+             0, 700, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+#pragma omp parallel for schedule(static) private(buf)
+    for (i=0;i<ut->cols;++i)
+    {
+      buf = createVector(4*(b->rows+1));
+      fstinv(b->data[i], &N, buf->data, &NN);
+      freeVector(buf);
+    }
+
+    MPI_Send(&b->as_vec->data[0], b->as_vec->len, MPI_DOUBLE, 0, 800, MPI_COMM_WORLD);
+  }
+
+  if (rank == 0)
+  {
+    recvParts(partlens, displacements, b, N, size, 800);
+  }
+
+  freeMatrix(ut);
+}
+\end{lstlisting}
+
+% section section_name (end)
