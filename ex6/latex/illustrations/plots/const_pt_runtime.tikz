@@ -1,0 +1,25 @@
+% -*- root: ../../ex6.tex -*-
+
+\begin{tikzpicture}[font = \sffamily]
+    \begin{axis}[
+        title={Run time vs. problem size for $P=6, T=6$},
+        xlabel={$N$},
+        ylabel={$\tau$},
+        legend entries={Measured run time, $N^2\ln(N)\cdot 60\times 10^{-9}$}
+        ]
+        \addlegendimage{color=black};
+        \addlegendimage{color=black,densely dashed};
+        \foreach \x  in {1,2,...,10} {
+          \addplot[mark=x]
+              table[
+                      x=n,
+                      y=runtime,
+                      col sep=tab,
+                   ]
+              {output_clean/const_pt_\x};
+          }
+          \addlegendentry{Measured runtime};
+        \addplot[domain=0:16384, densely dashed] {x^2*ln(x)*(60/10^9)};
+        \addlegendentry{$N^2\ln(N)\times 60\cdot 10^{-9}$};
+      \end{axis}
+\end{tikzpicture}

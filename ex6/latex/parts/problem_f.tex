@@ -1,1 +1,52 @@
 % -*- root: ../ex6.tex -*-
+\subsection{Non-homogeneous Dirichlet boundary conditions}
+So far we have considered the case where $u_{\partial \Omega} = 0$. Having a constant value on the boundary
+\begin{equation}
+  u_{\partial \Omega} = C_{\partial \Omega}
+\end{equation}
+
+is just as simple: solve
+\begin{equation}	
+-\nabla^2 \hat{u} = 0,
+\end{equation}
+
+then substitute back
+
+\begin{equation}	
+u = \hat{u} + C_{\partial \Omega}.
+\end{equation}
+
+When the boundary is not constant, this gets more tricky. Using the discrete sine transform (DST) to obtain eigenvalues and eigenvectors depends on u having the same boundary conditions as the sine function in use. Consider the 1D case, where $u = u(x)$:
+
+\begin{equation}
+	u(0) = u(1) = 0.
+\end{equation}
+
+This gives us a series of sine functions that we can use to create an odd fourier series to represent our $u$,
+
+\begin{equation}
+	s_j(x) = sin\left(j \pi x\right)
+\end{equation}
+
+because
+
+\begin{equation}
+	s_j(0) = s_j(1) = 0, \;\;\; j \in \mathbb{N}.
+\end{equation}
+
+In other words: \emph{no}, we cannot use DST for arbitrary boundary conditions. This is not a limitation of a general fourier sum
+
+\begin{equation}
+	f(x) = \frac{1}{2} a_0
+		+ \sum_{j=1}^{\infty} a_j \cos(j \pi x)
+		+ \sum_{j=1}^{\infty} b_j \sin(j \pi x)
+		,
+\end{equation}
+
+which is in fact the common way to solve Navier's thin plate problem
+
+\begin{equation}
+-\nabla^4 w = -\frac{q}{D}.
+\end{equation}
+
+... wich is not too different from the poisson equation. Digression aside: we have not explored whether fourier series may be used to eigenvalues for general Dirichlet boundary conditions, but it does not have the obvious limitation DST has.
