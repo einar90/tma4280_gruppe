@@ -2,8 +2,8 @@
 
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
-        title={Plot of runtime vs. number of MPI processes $P$ and OpenMP Threads $T$. $P\cdot T=36$},
-        xlabel={$P,T$},
+        title={Plot of runtime vs. number of MPI processes $p$ and OpenMP Threads $t$. $p\cdot t=36$},
+        xlabel={$p,t$},
         ylabel={$\tau$},
         ]
           \addplot[color=red, mark=x]
@@ -13,7 +13,7 @@
                       col sep=tab,
                    ]
               {output_clean/const_n_16384_mod_36p};
-          \addlegendentry{Increasing $P$};
+          \addlegendentry{Increasing $p$};
           \addplot[color=blue, mark=x]
               table[
                       x=omp,
@@ -21,6 +21,6 @@
                       col sep=tab,
                    ]
               {output_clean/const_n_16384_mod_36p};
-          \addlegendentry{Increasing $T$};
+          \addlegendentry{Increasing $t$};
       \end{axis}
 \end{tikzpicture}

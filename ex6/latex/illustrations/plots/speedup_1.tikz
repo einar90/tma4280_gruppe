@@ -3,7 +3,7 @@
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
         title={Speedup},
-        xlabel={$P$},
+        xlabel={$p$},
         ylabel={$S_p = \tau_1 / \tau_p$},
         xmin=0,
         ]

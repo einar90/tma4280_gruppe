@@ -4,11 +4,11 @@
     \begin{axis}[
         title={Parallell efficiency and speedup},
         xlabel={$P\times T$},
-        ylabel={$\eta = S_p / P$},
+        ylabel={$\eta_p = S_p / p$},
         xmin=0,
         ylabel near ticks,
         axis y line*=right,
-        legend entries={Parallell efficiency ($\eta_p$), Speedup ($S_p$), Perfect speedup ($\tau_1 \times (P\times T) / \tau_1$)}
+        legend entries={Parallell efficiency ($\eta_p$), Speedup ($S_p$), Perfect speedup ($\tau_1 \times (p\times t) / \tau_1$)}
         ]
         \addlegendimage{color=blue, mark=x};
         \addlegendimage{color=red, mark=x};
@@ -22,7 +22,7 @@
               {output_clean/const_n_16384_mod};
       \end{axis}
       \begin{axis}[
-        xlabel={$P$},
+        xlabel={$p$},
         ylabel={$S_p = \tau_1 / \tau_p$},
         xmin=0,
         hide x axis,

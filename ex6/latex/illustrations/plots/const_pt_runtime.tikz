@@ -2,10 +2,10 @@
 
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
-        title={Run time vs. problem size for $P=6, T=6$},
-        xlabel={$N$},
+        title={Run time vs. problem size for $p=6, t=6$},
+        xlabel={$n$},
         ylabel={$\tau$},
-        legend entries={Measured run time, $N^2\ln(N)\cdot 60\times 10^{-9}$}
+        legend entries={Measured run time, $n^2\ln(n)\cdot 60\times 10^{-9}$}
         ]
         \addlegendimage{color=black};
         \addlegendimage{color=black,densely dashed};
@@ -20,6 +20,6 @@
           }
           \addlegendentry{Measured runtime};
         \addplot[domain=0:16384, densely dashed] {x^2*ln(x)*(60/10^9)};
-        \addlegendentry{$N^2\ln(N)\times 60\cdot 10^{-9}$};
+        \addlegendentry{$n^2\ln(n)\times 60\cdot 10^{-9}$};
       \end{axis}
 \end{tikzpicture}

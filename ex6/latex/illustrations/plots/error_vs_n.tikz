@@ -2,8 +2,8 @@
 
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
-        title={Plot of error vs. $N$},
-        xlabel={$N$},
+        title={Plot of error vs. $n$},
+        xlabel={$n$},
         ylabel={$error$},
         xmode=log,
         ymode=log,

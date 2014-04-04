@@ -3,8 +3,8 @@
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
         title={Parallell efficiency},
-        xlabel={$P$},
-        ylabel={$\eta = S_p / P$},
+        xlabel={$p$},
+        ylabel={$\eta = S_p / p$},
         xmin=0,
         ]
           \addplot[mark=x]

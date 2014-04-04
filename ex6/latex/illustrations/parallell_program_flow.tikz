@@ -50,7 +50,7 @@
 
   % Transpose
   \node [dot] (branch_2) at (8.5,0) {};
-  \draw [] (gather_1.center) -- (branch_2.center) node [midway, fill=white] {0:$T$};
+  \draw [] (gather_1.center) -- (branch_2.center) node [midway, fill=white] {0:$t$};
 
 
 
@@ -140,7 +140,7 @@
 
   % Second transpose
   \node [dot] (branch_4) at (8.5, -5) {};
-  \draw [] (gather_3.center) -- (branch_4.center) node [midway, fill=white] {0:$T$};
+  \draw [] (gather_3.center) -- (branch_4.center) node [midway, fill=white] {0:$t$};
 
 
 

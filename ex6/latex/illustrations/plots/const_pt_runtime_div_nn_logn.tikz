@@ -3,8 +3,8 @@
 \begin{tikzpicture}[font = \sffamily]
     \begin{axis}[
         title={},
-        xlabel={$N$},
-        ylabel={$\tau / (N^2\ln{N})$},
+        xlabel={$n$},
+        ylabel={$\tau / (n^2\ln{n})$},
         ]
         \foreach \x  in {1,2,...,10} {
           \addplot[mark=x]
