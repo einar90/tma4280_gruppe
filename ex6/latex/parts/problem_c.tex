@@ -4,23 +4,23 @@
 
 \subsection{Comparison of MPI and OpenMP performance} % (fold)
 \label{sub:comparison_of_mpi_and_openmp_performance}
-In this section we compare the run times for $N=16,384$ and various combinations of the number of MPI processes $P$ and OpenMP threads pr. process $T$, where $P\times T = 36$. The results are shown in Table~\ref{tab:runtimes_36}. In our case, we achieve the best performance for large $T$ and low $P$: the run time with $T=36, P=1$ is 16.3\% lower than the second best run time, with $T=18, P=2$. In the mid range we find the run times for high numbers of $P$ and low numbers of $T$. We get the highest run times for close numbers of $T$ and $P$.
+In this section we compare the run times for $n=16,384$ and various combinations of the number of MPI processes $p$ and OpenMP threads pr. process $t$, where $p\times t = 36$. The results are shown in Table~\ref{tab:runtimes_36}. In our case, we achieve the best performance for large $t$ and low $p$: the run time with $t=36, p=1$ is 16.3\% lower than the second best run time, with $t=18, p=2$. In the mid range we find the run times for high numbers of $p$ and low numbers of $t$. We get the highest run times for close numbers of $t$ and $p$.
 
-The significantly lower run time for $P=1$ is likely due to the absence of \texttt{MPI\_Send/Recv} calls, which introduces a significant latency in the program.
+The significantly lower run time for $p=1$ is likely due to the absence of \texttt{MPI\_Send/Recv} calls, which introduces a significant latency in the program.
 
-The relatively good run time for $P=36$ is explained by the fact that one node is ``reserved'' for transposing and distributing the matrix, while the 35 others are responsible for transformations. This means 35 transformations can run in parallel in this case, while in the cases with $P=18,12,9,6$ only $(P-1)\times T = 34, 33, 32$ and $30$ threads, respectively, run in parallel.
+The relatively good run time for $p=36$ is explained by the fact that one node is ``reserved'' for transposing and distributing the matrix, while the 35 others are responsible for transformations. This means 35 transformations can run in parallel in this case, while in the cases with $p=18,12,9,6$ only $(p-1)\times t = 34, 33, 32$ and $30$ threads, respectively, run in parallel.
 
-Note that the run time for $P=1,2$ was acquired from runs on one Kongull node, while the others were acquired from runs on three nodes. This is likely the explanation for the low run time for $P=2, T=1$, but it should not affect the case with $P=1,T=36$ as the processes should not ``spread'' to the other nodes when MPI is not active.
+Note that the run time for $p=1,2$ was acquired from runs on one Kongull node, while the others were acquired from runs on three nodes. This is likely the explanation for the low run time for $p=2, t=1$, but it should not affect the case with $p=1,t=36$ as the processes should not ``spread'' to the other nodes when MPI is not active.
 
 In conclusion: out program does not utilize the hybrid model very well at all.
 
 \begin{table}[H]
   \centering
-  \caption{Measured runtimes when $P\times T = 36$, for $N=16,386$.}
+  \caption{Measured runtimes when $p\times t = 36$, for $n=16,386$.}
   \label{tab:runtimes_36}
   \begin{tabularx}{0.5\textwidth}{XXXX}
     \toprule
-    $T$ & $P$ & $\tau$ \\
+    $t$ & $p$ & $\tau$ \\
     \midrule
     36  &  1  &  112.515614 \\
     18  &  2  &  134.508309 \\
