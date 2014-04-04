@@ -1,1 +1,32 @@
 % -*- root: ../ex6.tex -*-
+\section{Comparison of MPI and OpenMP performance} % (fold)
+\label{sec:comparison_of_mpi_and_openmp_performance}
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{illustrations/plots/runtime_36p.pdf}
+  \caption{Plot of the runtimes for $P\times T = 36$ when $N=16,386$}
+  \label{fig:runtime_36p}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \caption{Measured runtimes when $P\times T = 36$, for $N=16,386$.}
+  \label{tab:runtimes_36}
+  \begin{tabularx}{0.5\textwidth}{XXXX}
+    \toprule
+    $T$ & $P$ & $\tau$ \\
+    \midrule
+    36  &  1  &  112.515614 \\
+    18  &  2  &  134.508309 \\
+    1   & 36  &  136.474492 \\
+    2   & 18  &  141.108449 \\
+    3   & 12  &  143.360202 \\
+    4   &  9  &  147.304511 \\
+    6   &  6  &  153.733214 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+% section comparison_of_mpi_and_openmp_performance (end)
